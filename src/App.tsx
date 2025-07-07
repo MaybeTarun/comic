@@ -108,14 +108,14 @@ function App() {
         <motion.img
           src={kid}
           alt="Tarun Gupta - Full Stack Developer Portfolio Introduction"
-          className="border-4 border-black w-[90vw] md:w-[60vw] h-auto"
+          className="border-2 md:border-4 border-black w-[90vw] md:w-[60vw] h-auto"
           loading="lazy"
           initial={{ scale: 3 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: 'easeInOut' }}
         />
         {showSpeech && (
-          <SpeechBoxR className="absolute max-w-[90vw] md:left-[15%] bottom-40 md:bottom-8 text-base">
+          <SpeechBoxR className="absolute max-w-[90vw] md:left-[15%] bottom-[25%] md:bottom-8 text-base">
             Since birth, Tarun showed signs of becoming<br className='hidden md:block'/> something more than human... <span className="gaegu-bold text-lg md:text-4xl">a Developer.</span>
           </SpeechBoxR>
         )}
@@ -168,7 +168,7 @@ function App() {
           </div>
           <div className="flex-1 flex items-center justify-end mt-24 md:mt-0">
             <div
-              className="w-full border-4 border-r-0 border-black p-6 ml-4 md:ml-20 flex flex-col gap-6 bg-white relative"
+              className="w-full border-2 md:border-4 border-r-0 border-black p-6 ml-4 md:ml-20 flex flex-col gap-4 md:gap-6 bg-white relative"
               style={{
                 backgroundImage: `url(${skillbg})`,
                 backgroundSize: 'cover',
@@ -208,7 +208,7 @@ function App() {
           <img
             src={quests}
             alt="Tarun Gupta embarking on development projects and challenges"
-            className="relative w-full h-auto border-4 border-l-0 border-black"
+            className="relative w-full h-auto border-2 md:border-4 border-l-0 border-black"
             loading="lazy"
           />
           <SpeechBoxLL className="absolute top-[20rem] -right-[60%] hidden md:block">
@@ -231,7 +231,7 @@ function App() {
             transition={{ type: 'spring', stiffness: 60, damping: 12 }}
           >
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 z-10">
-              <h2 className="text-2xl md:text-3xl font-bold gaegu-bold text-black border-4 border-black bg-white px-6 py-2">
+              <h2 className="text-2xl md:text-3xl font-bold gaegu-bold text-black border-2 md:border-4 border-black bg-white px-6 py-2">
                 #QUESTS
               </h2>
             </div>
@@ -268,7 +268,7 @@ function App() {
                   <h3 className="font-bold font-mono text-base capitalize text-center">Concrete Damage Detector</h3>
                   <p className="text-sm font-mono normal-case text-justify">Built a YOLO-powered damage detector to spot and segment cracks in concrete — keeping buildings strong, one frame at a time.</p>
                 </SpeechBoxSolid>
-                <div className="max-w-[40vw] h-auto border-4 border-black overflow-hidden">
+                <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
                   <img
                     src={concrete}
                     alt="Concrete Damage Detector - AI-powered crack detection system for infrastructure monitoring"
@@ -311,7 +311,7 @@ function App() {
                   <h3 className="font-bold font-mono text-base capitalize text-center">Bento Grid Generator</h3>
                   <p className="text-sm font-mono normal-case text-justify">Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.</p>
                 </SpeechBoxSolid>
-                <div className="max-w-[40vw] h-auto border-4 border-black overflow-hidden">
+                <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
                   <img
                     src={bento}
                     alt="Bento Grid Generator - UI layout tool for creating bento-style designs with live previews"
@@ -333,7 +333,7 @@ function App() {
                 href="https://maybetarun.in/projects" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-black text-white border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
+                className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
               >
                 Check out more quests/projects
               </a>
@@ -371,7 +371,7 @@ function App() {
                   <h3 className="font-bold font-mono text-base capitalize text-center">Cognify</h3>
                   <p className="text-sm font-mono normal-case text-justify">Developed an Android learning platform with Kotlin and OpenAI to simplify how users learn and understand new concepts.</p>
                 </SpeechBoxSolid>
-                <div className="max-w-[40vw] h-auto border-4 border-black overflow-hidden">
+                <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
                   <img
                     src={cognify}
                     alt="Cognify - Android learning platform with AI-powered concept explanation"
@@ -416,7 +416,7 @@ function App() {
                 </SpeechBoxSolid>
                 <video
                   src={aaargh}
-                  className="max-w-[40vw] h-auto border-4 border-black"
+                  className="max-w-[40vw] h-auto border-2 md:border-4 border-black"
                   controls
                   muted
                   playsInline
@@ -432,7 +432,7 @@ function App() {
       <section className="w-full flex flex-col items-center justify-center bg-white my-16 md:hidden" aria-label="Portfolio Projects Mobile">
         <div className="w-full flex flex-col items-center gap-8">
           <div className="w-full flex justify-center">
-            <h2 className="text-2xl font-bold gaegu-bold text-black border-4 border-black bg-white px-6 py-2 w-fit">
+            <h2 className="text-2xl font-bold gaegu-bold text-black border-2 md:border-4 border-black bg-white px-6 py-2 w-fit">
               #QUESTS
             </h2>
           </div>
@@ -465,7 +465,7 @@ function App() {
                   loading="lazy"
                 />
               </a>
-              <div className="w-full h-auto border-4 border-black overflow-hidden">
+              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
                 <img
                   src={concrete}
                   alt="Concrete Damage Detector - AI-powered crack detection system for infrastructure monitoring"
@@ -508,7 +508,7 @@ function App() {
                   loading="lazy"
                 />
               </a>
-              <div className="w-full h-auto border-4 border-black overflow-hidden">
+              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
                 <img
                   src={bento}
                   alt="Bento Grid Generator - UI layout tool for creating bento-style designs with live previews"
@@ -551,7 +551,7 @@ function App() {
                   loading="lazy"
                 />
               </a>
-              <div className="w-full h-auto border-4 border-black overflow-hidden">
+              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
                 <img
                   src={cognify}
                   alt="Cognify - Android learning platform with AI-powered concept explanation"
@@ -594,10 +594,10 @@ function App() {
                   loading="lazy"
                 />
               </a>
-              <div className="w-full h-auto border-4 border-black overflow-hidden">
+              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
                 <video
                   src={aaargh}
-                  className="w-full h-auto border-4 border-black"
+                  className="w-full h-auto border-2 md:border-4 border-black"
                   controls
                   muted
                   playsInline
@@ -616,7 +616,7 @@ function App() {
               href="https://maybetarun.in/projects" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="bg-black text-white border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
+              className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
             >
               Check out more quests/projects
             </a>
@@ -639,7 +639,7 @@ function App() {
           style={{ y: imgParallaxY }}
           src={boredme}
           alt="Tarun Gupta looking for new challenges"
-          className="absolute top-[20rem] md:top-72 left-16 w-36 md:w-48 h-36 md:h-48 border-4 border-black object-cover"
+          className="absolute top-[20rem] md:top-72 left-16 w-36 md:w-48 h-36 md:h-48 border-2 md:border-4 border-black object-cover"
           loading="lazy"
         />
       </section>
@@ -669,7 +669,7 @@ function App() {
                 <span className="text-2xl font-bold gaegu-regular">Email Me</span>
               </div>
             </a>
-            <span className="text-[0.75rem] md:text-base font-mono text-black mt-2">[or send me a pigeon]</span>
+            <span className="text-[0.75rem] md:text-base font-mono text-black mt-2">[or send a pigeon]</span>
           </div>
         </div>
         <div className="flex flex-row justify-center items-center gap-6 mb-16 mt-8">
