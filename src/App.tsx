@@ -1,8 +1,7 @@
-import test from './assets/test.jpg';
-import flyingTarun from './assets/flyingTarun.png';
+import flyingTarun from './assets/superman.gif';
 import { SpeechBox, SpeechBoxR, SpeechBoxL, SpeechBoxLL, SpeechBoxSolid } from './components/SpeechBox';
 import { AvatarCircles } from "./components/AvatarCircles";
-import skillbg from './assets/skillbg.jpg';
+import skillbg from './assets/skillbg.avif';
 import concrete from './assets/concrete.png';
 import cognify from './assets/cognify.png';
 import bento from './assets/bento.png';
@@ -15,6 +14,13 @@ import GithubLogo from './assets/GithubLogo.svg';
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Lenis from '@studio-freight/lenis';
+import kid from './assets/kid.webp';
+import awakening from './assets/awakening.webp';
+import quests from './assets/quests.webp';
+import sky from './assets/sky.webp';
+import looking from './assets/looking.webp';
+import boredme from './assets/boredme.webp';
+import bug from './assets/bug.webp';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -100,7 +106,7 @@ function App() {
       {/* page 1 */}
       <section className="relative w-[60vw] max-w-[90vw] mt-16" aria-label="Introduction">
         <motion.img
-          src={test}
+          src={kid}
           alt="Tarun Gupta - Full Stack Developer Portfolio Introduction"
           className="border-4 border-black w-full h-auto"
           loading="lazy"
@@ -118,7 +124,7 @@ function App() {
       {/* page 2 */}
       <section className="relative w-full h-[30vh] mt-60" aria-label="Development Journey">
         <img
-          src={test}
+          src={awakening}
           alt="Tarun Gupta's development journey and training in coding"
           className="border-y-4 border-black w-full h-full object-cover"
           loading="lazy"
@@ -130,13 +136,22 @@ function App() {
 
       <section className="relative w-full h-[45vh] mt-40 mb-16" aria-label="Developer Skills">
         <img
-          src={test}
+          src={sky}
           alt="Tarun Gupta showcasing developer skills and expertise"
           className="border-y-4 border-black w-full h-full object-cover relative"
           loading="lazy"
         />
-        <img src={flyingTarun} alt="Tarun Gupta flying character illustration" className="absolute h-36 w-auto -rotate-12 top-0 left-8" loading="lazy" />
-        <div className='absolute -rotate-[20deg] top-[40%] left-[25%] text-6xl gaegu-regular text-[#FFD403]'><span className=''>W</span><span className='text-7xl'>O</span><span className='text-8xl'>O</span><span className='text-8xl'>!</span></div>
+        <img src={flyingTarun} alt="Tarun Gupta flying character illustration" className="absolute h-36 w-auto -rotate-12 -top-4 left-4 scale-125" loading="lazy" />
+        <img 
+          src={bug} 
+          alt="Bug illustration" 
+          className="absolute h-28 cursor-pointer w-auto bottom-8 right-20 scale-110" 
+          loading="lazy" 
+          onClick={() => {
+            alert('soon will be a shooter game');
+          }}
+        />
+        <div className='absolute -rotate-[20deg] top-12 left-[28%] text-6xl gaegu-regular text-[#FFD403]'><span className=''>W</span><span className='text-7xl'>O</span><span className='text-8xl'>O</span><span className='text-8xl'>!</span></div>
       </section>
 
       {/* page 3 */}
@@ -148,7 +163,7 @@ function App() {
             <img 
               src={arrow} 
               alt="Arrow pointing to skills section" 
-              className="absolute -bottom-20 right-8 w-32 h-auto rotate-45"
+              className="absolute -bottom-20 right-8 w-32 h-auto rotate-[40deg]"
               loading="lazy"
             />
           </div>
@@ -181,7 +196,7 @@ function App() {
                 <AvatarCircles avatarUrls={programmingAvatars} numPeople={99} />
               </div>
               <div className="flex items-center gap-4 border-2 border-black px-8 py-4 bg-white text-black text-left text-xl font-mono capitalize rounded-xl">
-                <span className="flex-1">ui/ux designing</span>
+                <span className="flex-1">UI/UX designing</span>
                 <AvatarCircles avatarUrls={uiuxAvatars} numPeople={99} />
               </div>
             </div>
@@ -192,7 +207,7 @@ function App() {
       <section className="w-full h-fit flex items-center justify-start bg-white my-16" aria-label="Project Journey">
         <div className="w-1/2 flex items-center justify-center relative">
           <img
-            src={test}
+            src={quests}
             alt="Tarun Gupta embarking on development projects and challenges"
             className="relative w-full h-auto border-4 border-l-0 border-black"
             loading="lazy"
@@ -207,7 +222,12 @@ function App() {
             {/* page 5 */}
       <section className="w-full min-h-screen flex items-center justify-center bg-white my-32 relative" aria-label="Portfolio Projects">
         <div className="flex flex-row gap-8">
-          <div className="flex flex-col gap-8 mt-12 relative">
+          <motion.div
+            className="flex flex-col gap-8 mt-12 relative"
+            initial={{ y: 40 }}
+            whileInView={{ y: 0 }}
+            transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+          >
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 z-10">
               <h2 className="text-3xl font-bold gaegu-bold text-black border-4 border-black bg-white px-6 py-2">
                 #QUESTS
@@ -299,8 +319,13 @@ function App() {
                 </div>
               </div>
             </article>
-          </div>
-                    <div className="flex flex-col gap-8 -mt-12 relative">
+          </motion.div>
+          <motion.div
+            className="flex flex-col gap-8 -mt-12 relative"
+            initial={{ y: -40 }}
+            whileInView={{ y: 0 }}
+            transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+          >
             <div className="absolute left-1/2 bottom-0 -translate-x-1/2 z-10">
               <a 
                 href="https://maybetarun.in/projects" 
@@ -397,14 +422,14 @@ function App() {
                 />
               </div>
             </article>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* page 6 */}
-      <section className="w-full h-[60vh] mt-32 mb-16 relative">
+      <section className="w-full h-[70vh] mt-32 mb-16 relative">
         <img
-          src={test}
+          src={looking}
           alt="Tarun Gupta's development journey and achievements"
           className="w-full h-full object-cover border-y-4 border-black"
           loading="lazy"
@@ -414,7 +439,7 @@ function App() {
         </SpeechBoxR>
         <motion.img
           style={{ y: imgParallaxY }}
-          src={test}
+          src={boredme}
           alt="Tarun Gupta looking for new challenges"
           className="absolute top-72 left-16 w-48 h-48 border-4 border-black object-cover"
           loading="lazy"
