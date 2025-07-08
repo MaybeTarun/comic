@@ -12,7 +12,7 @@ import LinkedinLogo from './assets/LinkedinLogo.svg';
 import XLogo from './assets/XLogo.svg';
 import GithubLogo from './assets/GithubLogo.svg';
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Lenis from '@studio-freight/lenis';
 import kid from './assets/kid.webp';
@@ -23,6 +23,8 @@ import looking from './assets/looking.webp';
 import boredme from './assets/boredme.webp';
 import bug from './assets/bug.webp';
 import { TiArrowSortedUp } from 'react-icons/ti';
+import { getDatabase, ref, runTransaction, get } from 'firebase/database';
+import app from './firebase';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -74,6 +76,10 @@ function App() {
   const [rotation, setRotation] = useState({ initial: -20, whileInView: -12 });
 
   const [arrowRotation, setArrowRotation] = useState({ initial: 110, whileInView: 90 });
+
+  const [views, setViews] = useState<number | null>(null);
+
+  const incrementedRef = useRef(false);
 
   useEffect(() => {
     function handleResize() {
@@ -133,24 +139,44 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (incrementedRef.current) return;
+    incrementedRef.current = true;
+
+    const db = getDatabase(app);
+    const counterRef = ref(db, 'pageviews');
+
+    runTransaction(counterRef, (current) => (current || 0) + 1)
+      .then(() => {
+        return get(counterRef);
+      })
+      .then((snapshot) => {
+        setViews(snapshot.val());
+      })
+      .catch((error) => {
+        setViews(null);
+        console.error('Error updating or fetching pageviews:', error);
+      });
+  }, []);
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center bg-white relative">
-      <div className="absolute top-2 right-4 z-30 text-black gaegu-regular text-lg md:text-xl">
-        Total Reads: <span className='underline'>100</span>
+      <div className="absolute top-2 right-4 text-black gaegu-regular text-lg md:text-xl z-0">
+        Total Reads: <span className='border-b-2 border-black'>{views === null ? '...' : views}</span>
       </div>
       {/* page 1 */}
       <section className="relative w-full h-dvh flex justify-center items-center" aria-label="Introduction">
         <motion.img
           src={kid}
           alt="Tarun Gupta - Full Stack Developer Portfolio Introduction"
-          className="border-2 md:border-4 border-black w-[90vw] md:w-[60vw] h-auto"
+          className="border-2 md:border-4 border-black w-[90vw] md:w-[60vw] h-auto z-10"
           loading="lazy"
           initial={{ scale: 3 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: 'easeInOut' }}
         />
         {showSpeech && (
-          <SpeechBoxR className="absolute max-w-[90vw] md:left-[15%] bottom-[25%] md:bottom-8 text-base">
+          <SpeechBoxR className="absolute max-w-[90vw] md:left-[15%] bottom-[25%] md:bottom-8 text-base z-20">
             Since birth, Tarun showed signs of becoming<br className='hidden md:block'/> something more than human... <span className="gaegu-bold text-lg md:text-4xl">a Developer.</span>
           </SpeechBoxR>
         )}
