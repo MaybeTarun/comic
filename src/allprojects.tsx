@@ -214,6 +214,7 @@ const AllProjects = () => {
                         style={{
                           clipPath: clip,
                         }}
+                        loading="lazy"
                       />
                     </div>
                   );
@@ -247,6 +248,7 @@ const AllProjects = () => {
                         style={{
                           clipPath: clip,
                         }}
+                        loading="lazy"
                       />
                     </div>
                   );
@@ -283,6 +285,7 @@ const AllProjects = () => {
                         style={{
                           clipPath: clip,
                         }}
+                        loading="lazy"
                       />
                     </div>
                   );
@@ -316,6 +319,7 @@ const AllProjects = () => {
                         style={{
                           clipPath: clip,
                         }}
+                        loading="lazy"
                       />
                     </div>
                   );
@@ -346,6 +350,7 @@ const AllProjects = () => {
                       style={{
                         clipPath: clip,
                       }}
+                      loading="lazy"
                     />
                   </div>
                 );
@@ -372,6 +377,7 @@ const AllProjects = () => {
                         className="w-full object-contain bg-white cursor-pointer"
                         onClick={() => window.open(proj.link, '_blank')}
                         style={{ height: '150%', clipPath: clip }}
+                        loading="lazy"
                       />
                     </div>
                   );
@@ -398,6 +404,7 @@ const AllProjects = () => {
                         className="w-full h-auto object-contain bg-white cursor-pointer"
                         onClick={() => window.open(proj.link, '_blank')}
                         style={{ clipPath: clip }}
+                        loading="lazy"
                       />
                     </div>
                   );
@@ -427,6 +434,7 @@ const AllProjects = () => {
                         className="w-full h-auto object-contain bg-white cursor-pointer"
                         onClick={() => window.open(proj.link, '_blank')}
                         style={{ clipPath: clip }}
+                        loading="lazy"
                       />
                     </div>
                   );
@@ -451,6 +459,7 @@ const AllProjects = () => {
                         className="w-full object-contain bg-white cursor-pointer"
                         onClick={() => window.open(proj.link, '_blank')}
                         style={{ height: '150%', clipPath: clip }}
+                        loading="lazy"
                       />
                       {/* <img className='absolute -top-6 -left-6 h-16 z-50' src={downloads}/> */}
                     </div>
@@ -467,6 +476,7 @@ const AllProjects = () => {
                   alt={proj.name}
                   className="w-full h-auto object-contain bg-white border border-black rounded-xl cursor-pointer"
                   onClick={() => window.open(proj.link, '_blank')}
+                  loading="lazy"
                 />
               ))}
             </div>
@@ -502,7 +512,7 @@ function PageNumberControl() {
       >
         <TiArrowSortedUp style={{ transform: 'rotate(-90deg)' }} />
       </button>
-      <div className="px-6 py-2 rounded-lg border-2 border-black bg-white text-lg font-mono font-bold">
+      <div className="px-6 py-2 border-2 border-black bg-white text-lg gaegu-bold">
         Page {page} of {totalPages}
       </div>
       <button

@@ -14,7 +14,7 @@ import GithubLogo from './assets/GithubLogo.svg';
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 import kid from './assets/kid.webp';
 import awakening from './assets/awakening.webp';
 import quests from './assets/quests.webp';
@@ -25,6 +25,8 @@ import bug from './assets/bug.webp';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { getDatabase, ref, runTransaction, get } from 'firebase/database';
 import app from './firebase';
+import LoadingScreen from './LoadingScreen';
+import { FiEye, FiHeart } from 'react-icons/fi';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -80,6 +82,70 @@ function App() {
   const [views, setViews] = useState<number | null>(null);
 
   const incrementedRef = useRef(false);
+
+  const weekMs = 7 * 24 * 60 * 60 * 1000;
+  const lastLoaded = localStorage.getItem('comic-loading-last');
+  const now = Date.now();
+  const shouldShowLoading = !(lastLoaded && now - parseInt(lastLoaded, 10) < weekMs);
+  const [loading, setLoading] = useState(shouldShowLoading);
+
+  useEffect(() => {
+    const lastLoaded = localStorage.getItem('comic-loading-last');
+    const now = Date.now();
+    const weekMs = 7 * 24 * 60 * 60 * 1000;
+    if (lastLoaded && now - parseInt(lastLoaded, 10) < weekMs) {
+      setLoading(false);
+    }
+  }, []);
+
+  const [likes, setLikes] = useState<number | null>(null);
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    setLiked(localStorage.getItem('comic-liked') === 'true');
+
+    const db = getDatabase(app);
+    const likesRef = ref(db, 'likes');
+    get(likesRef).then(snapshot => {
+      setLikes(snapshot.exists() ? snapshot.val() : 0);
+    });
+
+    // const favicon = document.getElementById('dynamic-favicon');
+    // function handleVisibility() {
+    //   if (!favicon) return;
+    //   // Use absolute path to avoid issues
+    //   favicon.setAttribute(
+    //     'href',
+    //     document.visibilityState === 'visible' ? '/favicon2.webp' : '/favicon.webp'
+    //   );
+    // }
+    // document.addEventListener('visibilitychange', handleVisibility);
+    // // Set initial state
+    // handleVisibility();
+    // return () => {
+    //   document.removeEventListener('visibilitychange', handleVisibility);
+    // };
+  }, []);
+
+  const handleLike = async () => {
+    const db = getDatabase(app);
+    const likesRef = ref(db, 'likes');
+    if (liked) {
+      setLiked(false);
+      localStorage.removeItem('comic-liked');
+      
+      await runTransaction(likesRef, (current) => Math.max((current || 1) - 1, 0));
+    } else {
+      setLiked(true);
+      localStorage.setItem('comic-liked', 'true');
+      
+      await runTransaction(likesRef, (current) => (current || 0) + 1);
+    }
+    
+    get(likesRef).then(snapshot => {
+      setLikes(snapshot.exists() ? snapshot.val() : 0);
+    });
+  };
 
   useEffect(() => {
     function handleResize() {
@@ -160,208 +226,427 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-white relative">
-      <div className="absolute top-2 right-4 text-black gaegu-regular text-lg md:text-xl z-0">
-        Total Reads: <span className='border-b-2 border-black'>{views === null ? '...' : views}</span>
-      </div>
-      {/* page 1 */}
-      <section className="relative w-full h-dvh flex justify-center items-center" aria-label="Introduction">
-        <motion.img
-          src={kid}
-          alt="Tarun Gupta - Full Stack Developer Portfolio Introduction"
-          className="border-2 md:border-4 border-black w-[90vw] md:w-[60vw] h-auto z-10"
-          loading="lazy"
-          initial={{ scale: 3 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 2, ease: 'easeInOut' }}
-        />
-        {showSpeech && (
-          <SpeechBoxR className="absolute max-w-[90vw] md:left-[15%] bottom-[25%] md:bottom-8 text-base z-20">
-            Since birth, Tarun showed signs of becoming<br className='hidden md:block'/> something more than human... <span className="gaegu-bold text-lg md:text-4xl">a Developer.</span>
-          </SpeechBoxR>
-        )}
-      </section>
-
-      {/* page 2 */}
-      <section className="relative w-full h-[30vh] md:h-[40vh] md:mt-16" aria-label="Development Journey">
-        <div className="border-y-4 border-black w-full h-full object-cover overflow-hidden">
-          <motion.img
-            src={awakening}
-            alt="Tarun Gupta's development journey and training in coding"
-            className="w-full h-full object-cover"
-            loading="lazy"
-            initial={{ scale: 1.2 }}
-            whileInView={{ scale: 1.0 }}
-            transition={{ duration: 1 }}
-          />
-        </div>
-        <SpeechBoxL className="absolute -bottom-28 right-4 md:right-16">
-          He trained in the sacred arts of code,<br />logic, and late-night debugging.
-        </SpeechBoxL>
-      </section>
-
-
-      <section className="relative w-full h-[30vh] md:h-[45vh] mt-32 mb-16" aria-label="Developer Skills">
-        <div className="border-y-4 border-black w-full h-full object-cover relative overflow-hidden">
-          <motion.img
-            src={sky}
-            alt="Tarun Gupta showcasing developer skills and expertise"
-            className="w-full h-full object-cover"
-            loading="lazy"
-            initial={{ scale: 1.2 }}
-            whileInView={{ scale: 1.0 }}
-            transition={{ duration: 1 }}
-          />
-        </div>
-        <motion.img
-          src={flyingTarun}
-          alt="Tarun Gupta flying character illustration"
-          className="absolute h-12 md:h-36 w-auto rotate-[20deg] md:-rotate-12 -top-4 -left-4 md:left-4 scale-125"
-          loading="lazy"
-          initial={{ x: -40, rotate: rotation.initial + 'deg' }}
-          whileInView={{ x: 0, rotate: rotation.whileInView + 'deg' }}
-          transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
-        />
-        <motion.img
-          src={bug}
-          alt="Bug illustration"
-          className="absolute h-16 md:h-28 cursor-pointer w-auto bottom-4 md:bottom-8 right-8 md:right-20"
-          loading="lazy"
-          initial={{ x: 40 }}
-          whileInView={{ x: 0 }}
-          transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
-          onClick={() => {
-            alert('soon will be a shooter game');
-          }}
-        />
-        <div className='absolute rotate-[20deg] md:-rotate-[20deg] top-12 left-[28%] text-6xl gaegu-regular text-[#FFD403]'><span className='text-4xl md:text-6xl'>W</span><span className='text-5xl md:text-7xl'>O</span><span className='text-6xl md:text-8xl'>O</span><span className='text-6xl md:text-8xl'>!</span></div>
-      </section>
-
-      {/* <section className='relative w-full h-dvh mt-16'><div className='bg-red-500 w-full h-full'></div></section> */}
-
-      {/* page 3 */}
-      <section className="w-full h-fit flex flex-col md:flex-row items-center justify-center bg-white my-16" aria-label="Technical Skills">
-          <div className="flex-1 flex items-center justify-center -mt-32 relative">
-            <SpeechBox className="relative mt-16">
-              his arsenal only grew bigger
-            </SpeechBox>
-            <motion.img 
-              key={arrowRotation.initial}
-              src={arrow} 
-              alt="Arrow pointing to skills section" 
-              className="absolute -bottom-14 md:-bottom-20 right-56 md:right-8 w-20 md:w-32 h-auto"
-              loading="lazy"
-              initial={{ rotate: arrowRotation.initial }}
-              whileInView={{ rotate: arrowRotation.whileInView }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-          <div className="flex-1 flex items-center justify-end mt-24 md:mt-0">
-            <div
-              className="w-full border-y-2 border-l-2 md:border-l-4 md:border-y-4 border-r-0 border-black p-6 ml-4 md:ml-20 flex flex-col gap-4 md:gap-6 bg-white relative"
-              style={{
-                backgroundImage: `url(${skillbg})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
+    <>
+      {loading && <LoadingScreen onFinish={() => {
+        setLoading(false);
+        localStorage.setItem('comic-loading-last', Date.now().toString());
+      }} />}
+      <div className={`w-full min-h-screen flex flex-col items-center bg-white relative transition-opacity duration-500 ${loading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <div className="absolute top-2 right-4 text-black gaegu-regular text-lg md:text-xl z-[100]">
+          <span className="flex items-center gap-2">
+            <button
+              className="focus:outline-none flex items-center cursor-pointer"
+              onClick={handleLike}
+              aria-label={liked ? 'Unlike' : 'Like'}
             >
-              <h2 className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white border-2 border-black px-8 py-2 text-2xl font-bold gaegu-bold">
-                #SKILLS
-              </h2>
-              <motion.div
-                initial={{ y: 20 }}
-                whileInView={{ y: 0 }}
-                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
-              >
-                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
-                  <span className="flex-1">web development</span>
-                  <AvatarCircles avatarUrls={webDevAvatars} numPeople={99} />
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ y: 20 }}
-                whileInView={{ y: 0 }}
-                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
-              >
-                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
-                  <span className="flex-1">android development</span>
-                  <AvatarCircles avatarUrls={androidDevAvatars} numPeople={99} />
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ y: 20 }}
-                whileInView={{ y: 0 }}
-                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
-              >
-                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
-                  <span className="flex-1">cloud computing</span>
-                  <AvatarCircles avatarUrls={cloudAvatars} numPeople={99} />
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ y: 20 }}
-                whileInView={{ y: 0 }}
-                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
-              >
-                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
-                  <span className="flex-1">programming languages</span>
-                  <AvatarCircles avatarUrls={programmingAvatars} numPeople={99} />
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ y: 20 }}
-                whileInView={{ y: 0 }}
-                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
-              >
-                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
-                  <span className="flex-1">UI/UX designing</span>
-                  <AvatarCircles avatarUrls={uiuxAvatars} numPeople={99} />
-                </div>
-              </motion.div>
-            </div>
+              <FiHeart
+                className={`inline-block text-2xl transition-colors duration-200 ${liked ? 'text-red-500 fill-red-500' : 'text-black'}`}
+                style={{ strokeWidth: 2 }}
+                fill={liked ? 'red' : 'none'}
+              />
+              <span className="ml-1 select-none">{likes === null ? '.' : likes}</span>
+            </button>
+            <FiEye className="inline-block text-2xl" aria-label="Total Reads" />
+            <span className=''>{views === null ? '.' : views}</span>
+          </span>
         </div>
-      </section>
+        {/* page 1 */}
+        <section className="relative w-full h-dvh flex justify-center items-center" aria-label="Introduction">
+          <motion.img
+            src={kid}
+            alt="Tarun Gupta - Full Stack Developer Portfolio Introduction"
+            className="border-2 md:border-4 border-black w-[90vw] md:w-[60vw] h-auto z-10"
+            loading="lazy"
+            initial={{ scale: 3 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 2, ease: 'easeInOut' }}
+          />
+          {showSpeech && (
+            <SpeechBoxR className="absolute max-w-[90vw] md:left-[15%] bottom-[25%] md:bottom-8 text-base z-20">
+              Since birth, Tarun showed signs of becoming<br className='hidden md:block'/> something more than human... <span className="gaegu-bold text-lg md:text-4xl">a Developer.</span>
+            </SpeechBoxR>
+          )}
+        </section>
 
-      {/* page 4 */}
-      <section className="w-full h-fit flex items-center justify-start bg-white my-16" aria-label="Project Journey">
-        <div className="md:w-2/3 flex items-center justify-center relative">
-          <div className="relative w-full h-auto border-2 md:border-4 border-l-0 border-black overflow-hidden">
+        {/* page 2 */}
+        <section className="relative w-full h-[30vh] md:h-[40vh] md:mt-16" aria-label="Development Journey">
+          <div className="border-y-4 border-black w-full h-full object-cover overflow-hidden">
             <motion.img
-              src={quests}
-              alt="Tarun Gupta embarking on development projects and challenges"
-              className="w-full h-auto"
+              src={awakening}
+              alt="Tarun Gupta's development journey and training in coding"
+              className="w-full h-full object-cover"
               loading="lazy"
               initial={{ scale: 1.2 }}
               whileInView={{ scale: 1.0 }}
               transition={{ duration: 1 }}
             />
           </div>
-          <SpeechBoxLL className="absolute top-[20rem] -right-[60%] hidden md:block">
-            With his powers now honed, Tarun<br/>sets off on <span className='gaegu-bold'>quests</span> that tests both<br/>his logic and caffeine limits.
-          </SpeechBoxLL>
-          <SpeechBoxL className="absolute top-[24rem] -right-6 md:hidden block">
-            With his powers now honed, Tarun<br/>sets off on <span className='gaegu-bold'>quests</span> that tests both<br/>his logic and caffeine limits.
+          <SpeechBoxL className="absolute -bottom-28 right-4 md:right-16">
+            He trained in the sacred arts of code,<br />logic, and late-night debugging.
           </SpeechBoxL>
-        </div>
-        <div className="w-1/2"></div>
-      </section>
+        </section>
 
-      {/* page 5 for >md */}
-      <section className="w-full h-fit flex-row items-center justify-center bg-white my-32 relative hidden md:flex" aria-label="Portfolio Projects">
-        <div className="flex flex-col md:flex-row gap-8">
-          <motion.div
-            className="flex flex-col gap-8 md:mt-12 relative"
-            initial={{ y: 60 }}
-            whileInView={{ y: 0 }}
-            transition={{ type: 'spring', stiffness: 60, damping: 12 }}
-          >
-            <div className="absolute -top-24 left-1/2 -translate-x-1/2 z-10">
-              <h2 className="text-2xl md:text-3xl font-bold gaegu-bold text-black border-2 md:border-4 border-black bg-white px-6 py-2">
+
+        <section className="relative w-full h-[30vh] md:h-[45vh] mt-32 mb-16" aria-label="Developer Skills">
+          <div className="border-y-4 border-black w-full h-full object-cover relative overflow-hidden">
+            <motion.img
+              src={sky}
+              alt="Tarun Gupta showcasing developer skills and expertise"
+              className="w-full h-full object-cover"
+              loading="lazy"
+              initial={{ scale: 1.2 }}
+              whileInView={{ scale: 1.0 }}
+              transition={{ duration: 1 }}
+            />
+          </div>
+          <motion.img
+            src={flyingTarun}
+            alt="Tarun Gupta flying character illustration"
+            className="absolute h-12 md:h-36 w-auto rotate-[20deg] md:-rotate-12 -top-4 -left-4 md:left-4 scale-125"
+            loading="lazy"
+            initial={{ x: -40, rotate: rotation.initial + 'deg' }}
+            whileInView={{ x: 0, rotate: rotation.whileInView + 'deg' }}
+            transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
+          />
+          <motion.img
+            src={bug}
+            alt="Bug illustration"
+            className="absolute h-16 md:h-28 cursor-pointer w-auto bottom-4 md:bottom-8 right-8 md:right-20"
+            loading="lazy"
+            initial={{ x: 40 }}
+            whileInView={{ x: 0 }}
+            transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
+            onClick={() => {
+              alert('soon will be a shooter game');
+            }}
+          />
+          <div className='absolute rotate-[20deg] md:-rotate-[20deg] top-12 left-[28%] text-6xl gaegu-regular text-[#FFD403]'><span className='text-4xl md:text-6xl'>W</span><span className='text-5xl md:text-7xl'>O</span><span className='text-6xl md:text-8xl'>O</span><span className='text-6xl md:text-8xl'>!</span></div>
+        </section>
+
+        {/* <section className='relative w-full h-dvh mt-16'><div className='bg-red-500 w-full h-full'></div></section> */}
+
+        {/* page 3 */}
+        <section className="w-full h-fit flex flex-col md:flex-row items-center justify-center bg-white my-16" aria-label="Technical Skills">
+            <div className="flex-1 flex items-center justify-center -mt-32 relative">
+              <SpeechBox className="relative mt-16">
+                his arsenal only grew bigger
+              </SpeechBox>
+              <motion.img 
+                key={arrowRotation.initial}
+                src={arrow} 
+                alt="Arrow pointing to skills section" 
+                className="absolute -bottom-14 md:-bottom-20 right-56 md:right-8 w-20 md:w-32 h-auto"
+                loading="lazy"
+                initial={{ rotate: arrowRotation.initial }}
+                whileInView={{ rotate: arrowRotation.whileInView }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
+            <div className="flex-1 flex items-center justify-end mt-24 md:mt-0">
+              <div
+                className="w-full border-y-2 border-l-2 md:border-l-4 md:border-y-4 border-r-0 border-black p-6 ml-4 md:ml-20 flex flex-col gap-4 md:gap-6 bg-white relative"
+                style={{
+                  backgroundImage: `url(${skillbg})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <h2 className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white border-2 border-black px-8 py-2 text-2xl font-bold gaegu-bold">
+                  #SKILLS
+                </h2>
+                <motion.div
+                  initial={{ y: 20 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+                >
+                  <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                    <span className="flex-1">web development</span>
+                    <AvatarCircles avatarUrls={webDevAvatars} numPeople={99} />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ y: 20 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+                >
+                  <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                    <span className="flex-1">android development</span>
+                    <AvatarCircles avatarUrls={androidDevAvatars} numPeople={99} />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ y: 20 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+                >
+                  <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                    <span className="flex-1">cloud computing</span>
+                    <AvatarCircles avatarUrls={cloudAvatars} numPeople={99} />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ y: 20 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+                >
+                  <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                    <span className="flex-1">programming languages</span>
+                    <AvatarCircles avatarUrls={programmingAvatars} numPeople={99} />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ y: 20 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+                >
+                  <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                    <span className="flex-1">UI/UX designing</span>
+                    <AvatarCircles avatarUrls={uiuxAvatars} numPeople={99} />
+                  </div>
+                </motion.div>
+              </div>
+          </div>
+        </section>
+
+        {/* page 4 */}
+        <section className="w-full h-fit flex items-center justify-start bg-white my-16" aria-label="Project Journey">
+          <div className="md:w-2/3 flex items-center justify-center relative">
+            <div className="relative w-full h-auto border-2 md:border-4 border-l-0 border-black overflow-hidden">
+              <motion.img
+                src={quests}
+                alt="Tarun Gupta embarking on development projects and challenges"
+                className="w-full h-auto"
+                loading="lazy"
+                initial={{ scale: 1.2 }}
+                whileInView={{ scale: 1.0 }}
+                transition={{ duration: 1 }}
+              />
+            </div>
+            <SpeechBoxLL className="absolute top-[20rem] -right-[60%] hidden md:block">
+              With his powers now honed, Tarun<br/>sets off on <span className='gaegu-bold'>quests</span> that tests both<br/>his logic and caffeine limits.
+            </SpeechBoxLL>
+            <SpeechBoxL className="absolute top-[24rem] -right-6 md:hidden block">
+              With his powers now honed, Tarun<br/>sets off on <span className='gaegu-bold'>quests</span> that tests both<br/>his logic and caffeine limits.
+            </SpeechBoxL>
+          </div>
+          <div className="w-1/2"></div>
+        </section>
+
+        {/* page 5 for >md */}
+        <section className="w-full h-fit flex-row items-center justify-center bg-white my-32 relative hidden md:flex" aria-label="Portfolio Projects">
+          <div className="flex flex-col md:flex-row gap-8">
+            <motion.div
+              className="flex flex-col gap-8 md:mt-12 relative"
+              initial={{ y: 60 }}
+              whileInView={{ y: 0 }}
+              transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+            >
+              <div className="absolute -top-24 left-1/2 -translate-x-1/2 z-10">
+                <h2 className="text-2xl md:text-3xl font-bold gaegu-bold text-black border-2 md:border-4 border-black bg-white px-6 py-2">
+                  #QUESTS
+                </h2>
+              </div>
+              <article>
+                <div className="relative group overflow-hidden">
+                  <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
+                    <div
+                      className="absolute top-0 right-0 pointer-events-none"
+                      style={{
+                        width: 0,
+                        height: 0,
+                        borderTop: '40px solid #fff', 
+                        borderLeft: '40px solid transparent',
+                      }}
+                    />
+                  </div>
+                  <a
+                    href="https://github.com/MaybeTarun/Concrete-Damage-Detector"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute top-0 right-0 z-30"
+                    aria-label="View Concrete Damage Detector project on GitHub"
+                  >
+                    <img
+                      src={link}
+                      alt="Link to Concrete Damage Detector project"
+                      className="w-10 h-10"
+                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      loading="lazy"
+                    />
+                  </a>
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                    <h3 className="font-bold font-mono text-base capitalize text-center">Concrete Damage Detector</h3>
+                    <p className="text-sm font-mono normal-case text-justify">Built a YOLO-powered damage detector to spot and segment cracks in concrete — keeping buildings strong, one frame at a time.</p>
+                  </SpeechBoxSolid>
+                  <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
+                    <img
+                      src={concrete}
+                      alt="Concrete Damage Detector - AI-powered crack detection system for infrastructure monitoring"
+                      className="w-full h-auto transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </article>
+                          <article>
+                <div className="relative group overflow-hidden">
+                  <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
+                    <div
+                      className="absolute top-0 right-0 pointer-events-none"
+                      style={{
+                        width: 0,
+                        height: 0,
+                        borderTop: '40px solid #fff', 
+                        borderLeft: '40px solid transparent',
+                      }}
+                    />
+                  </div>
+                  <a
+                    href="https://bento-gen.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute top-0 right-0 z-30"
+                    aria-label="View Bento Grid Generator project"
+                  >
+                    <img
+                      src={link}
+                      alt="Link to Bento Grid Generator project"
+                      className="w-10 h-10"
+                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      loading="lazy"
+                    />
+                  </a>
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                    <h3 className="font-bold font-mono text-base capitalize text-center">Bento Grid Generator</h3>
+                    <p className="text-sm font-mono normal-case text-justify">Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.</p>
+                  </SpeechBoxSolid>
+                  <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
+                    <img
+                      src={bento}
+                      alt="Bento Grid Generator - UI layout tool for creating bento-style designs with live previews"
+                      className="w-full h-auto transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </article>
+            </motion.div>
+            <motion.div
+              className="flex flex-col gap-8 -mt-12 relative"
+              initial={{ y: -60 }}
+              whileInView={{ y: 0 }}
+              transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+            >
+              <div className="absolute left-1/2 bottom-0 -translate-x-1/2 z-10">
+                <Link
+                  to="/projects"
+                  className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
+                >
+                  Check out more quests/projects
+                </Link>
+              </div>
+              <article>
+                <div className="relative group overflow-hidden">
+                  <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
+                    <div
+                      className="absolute top-0 right-0 pointer-events-none"
+                      style={{
+                        width: 0,
+                        height: 0,
+                        borderTop: '40px solid #fff',
+                        borderLeft: '40px solid transparent',
+                      }}
+                    />
+                  </div>
+                  <a
+                    href="https://github.com/MaybeTarun/Cognify"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute top-0 right-0 z-30"
+                    aria-label="View Cognify project on GitHub"
+                  >
+                    <img
+                      src={link}
+                      alt="Link to Cognify project"
+                      className="w-10 h-10"
+                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      loading="lazy"
+                    />
+                  </a>
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                    <h3 className="font-bold font-mono text-base capitalize text-center">Cognify</h3>
+                    <p className="text-sm font-mono normal-case text-justify">Developed an Android learning platform with Kotlin and OpenAI to simplify how users learn and understand new concepts.</p>
+                  </SpeechBoxSolid>
+                  <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
+                    <img
+                      src={cognify}
+                      alt="Cognify - Android learning platform with AI-powered concept explanation"
+                      className="w-full h-auto transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </article>
+              <article>
+                <div className="relative group overflow-hidden">
+                  <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
+                    <div
+                      className="absolute top-0 right-0 pointer-events-none"
+                      style={{
+                        width: 0,
+                        height: 0,
+                        borderTop: '40px solid #fff', 
+                        borderLeft: '40px solid transparent',
+                      }}
+                    />
+                  </div>
+                  <a
+                    href="https://aaargh.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute top-0 right-0 z-30"
+                    aria-label="View AAARGH!! game project"
+                  >
+                    <img
+                      src={link}
+                      alt="Link to AAARGH!! game project"
+                      className="w-10 h-10"
+                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      loading="lazy"
+                    />
+                  </a>
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                    <h3 className="font-bold font-mono text-base capitalize text-center">AAARGH!!</h3>
+                    <p className="text-sm font-mono normal-case text-justify">Built a game where screaming 'aaaargh' actually makes you fly — no tapping, just weird noises.</p>
+                  </SpeechBoxSolid>
+                  <video
+                    src={aaargh}
+                    className="max-w-[40vw] h-auto border-2 md:border-4 border-black"
+                    controls
+                    muted
+                    playsInline
+                    title="AAARGH!! - Voice-controlled flying game demonstration"
+                  />
+                </div>
+              </article>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* page 5 for <md> */}
+        <section className="w-full flex flex-col items-center justify-center bg-white my-16 md:hidden" aria-label="Portfolio Projects Mobile">
+          <div className="w-full flex flex-col items-center gap-8">
+            <div className="w-full flex justify-center">
+              <h2 className="text-2xl font-bold gaegu-bold text-black border-2 md:border-4 border-black bg-white px-6 py-2 w-fit">
                 #QUESTS
               </h2>
             </div>
-            <article>
-              <div className="relative group overflow-hidden">
+            <article className="w-[90vw] h-full">
+              <div className="relative group overflow-hidden w-full h-full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -389,11 +674,7 @@ function App() {
                     loading="lazy"
                   />
                 </a>
-                <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
-                  <h3 className="font-bold font-mono text-base capitalize text-center">Concrete Damage Detector</h3>
-                  <p className="text-sm font-mono normal-case text-justify">Built a YOLO-powered damage detector to spot and segment cracks in concrete — keeping buildings strong, one frame at a time.</p>
-                </SpeechBoxSolid>
-                <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
+                <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
                   <img
                     src={concrete}
                     alt="Concrete Damage Detector - AI-powered crack detection system for infrastructure monitoring"
@@ -402,9 +683,13 @@ function App() {
                   />
                 </div>
               </div>
+              <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
+                <h3 className="font-bold font-mono text-sm capitalize text-center">Concrete Damage Detector</h3>
+                <p className="text-sm font-mono normal-case text-justify">Built a YOLO-powered damage detector to spot and segment cracks in concrete — keeping buildings strong, one frame at a time.</p>
+              </SpeechBoxSolid>
             </article>
-                        <article>
-              <div className="relative group overflow-hidden">
+            <article className="w-[90vw] h-full">
+              <div className="relative group overflow-hidden w-full h-full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -432,11 +717,7 @@ function App() {
                     loading="lazy"
                   />
                 </a>
-                <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
-                  <h3 className="font-bold font-mono text-base capitalize text-center">Bento Grid Generator</h3>
-                  <p className="text-sm font-mono normal-case text-justify">Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.</p>
-                </SpeechBoxSolid>
-                <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
+                <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
                   <img
                     src={bento}
                     alt="Bento Grid Generator - UI layout tool for creating bento-style designs with live previews"
@@ -445,24 +726,13 @@ function App() {
                   />
                 </div>
               </div>
+              <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
+                <h3 className="font-bold font-mono text-sm capitalize text-center">Bento Grid Generator</h3>
+                <p className="text-sm font-mono normal-case text-justify">Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.</p>
+              </SpeechBoxSolid>
             </article>
-          </motion.div>
-          <motion.div
-            className="flex flex-col gap-8 -mt-12 relative"
-            initial={{ y: -60 }}
-            whileInView={{ y: 0 }}
-            transition={{ type: 'spring', stiffness: 60, damping: 12 }}
-          >
-            <div className="absolute left-1/2 bottom-0 -translate-x-1/2 z-10">
-              <Link
-                to="/projects"
-                className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
-              >
-                Check out more quests/projects
-              </Link>
-            </div>
-            <article>
-              <div className="relative group overflow-hidden">
+            <article className="w-[90vw] h-full">
+              <div className="relative group overflow-hidden w-full h-full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -490,11 +760,7 @@ function App() {
                     loading="lazy"
                   />
                 </a>
-                <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
-                  <h3 className="font-bold font-mono text-base capitalize text-center">Cognify</h3>
-                  <p className="text-sm font-mono normal-case text-justify">Developed an Android learning platform with Kotlin and OpenAI to simplify how users learn and understand new concepts.</p>
-                </SpeechBoxSolid>
-                <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
+                <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
                   <img
                     src={cognify}
                     alt="Cognify - Android learning platform with AI-powered concept explanation"
@@ -503,9 +769,13 @@ function App() {
                   />
                 </div>
               </div>
+              <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
+                <h3 className="font-bold font-mono text-sm capitalize text-center">Cognify</h3>
+                <p className="text-sm font-mono normal-case text-justify">Developed an Android learning platform with Kotlin and OpenAI to simplify how users learn and understand new concepts.</p>
+              </SpeechBoxSolid>
             </article>
-            <article>
-              <div className="relative group overflow-hidden">
+            <article className="w-[90vw] h-full">
+              <div className="relative group overflow-hidden w-full h-full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -533,284 +803,101 @@ function App() {
                     loading="lazy"
                   />
                 </a>
-                <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
-                  <h3 className="font-bold font-mono text-base capitalize text-center">AAARGH!!</h3>
-                  <p className="text-sm font-mono normal-case text-justify">Built a game where screaming 'aaaargh' actually makes you fly — no tapping, just weird noises.</p>
-                </SpeechBoxSolid>
-                <video
-                  src={aaargh}
-                  className="max-w-[40vw] h-auto border-2 md:border-4 border-black"
-                  controls
-                  muted
-                  playsInline
-                  title="AAARGH!! - Voice-controlled flying game demonstration"
-                />
+                <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
+                  <video
+                    src={aaargh}
+                    className="w-full h-auto border-2 md:border-4 border-black"
+                    controls
+                    muted
+                    playsInline
+                    title="AAARGH!! - Voice-controlled flying game demonstration"
+                  />
+                </div>
               </div>
+              <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
+                <h3 className="font-bold font-mono text-sm capitalize text-center">AAARGH!!</h3>
+                <p className="text-sm font-mono normal-case text-justify">Built a game where screaming 'aaaargh' actually makes you fly — no tapping, just weird noises.</p>
+              </SpeechBoxSolid>
             </article>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* page 5 for <md> */}
-      <section className="w-full flex flex-col items-center justify-center bg-white my-16 md:hidden" aria-label="Portfolio Projects Mobile">
-        <div className="w-full flex flex-col items-center gap-8">
-          <div className="w-full flex justify-center">
-            <h2 className="text-2xl font-bold gaegu-bold text-black border-2 md:border-4 border-black bg-white px-6 py-2 w-fit">
-              #QUESTS
-            </h2>
+            <div className="w-full flex justify-center mt-4">
+              <Link
+                to="/projects"
+                className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
+              >
+                Check out more quests/projects
+              </Link>
+            </div>
           </div>
-          <article className="w-[90vw] h-full">
-            <div className="relative group overflow-hidden w-full h-full">
-              <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
-                <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
-                <div
-                  className="absolute top-0 right-0 pointer-events-none"
-                  style={{
-                    width: 0,
-                    height: 0,
-                    borderTop: '40px solid #fff', 
-                    borderLeft: '40px solid transparent',
-                  }}
-                />
-              </div>
-              <a
-                href="https://github.com/MaybeTarun/Concrete-Damage-Detector"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute top-0 right-0 z-30"
-                aria-label="View Concrete Damage Detector project on GitHub"
-              >
-                <img
-                  src={link}
-                  alt="Link to Concrete Damage Detector project"
-                  className="w-10 h-10"
-                  style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
-                  loading="lazy"
-                />
-              </a>
-              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
-                <img
-                  src={concrete}
-                  alt="Concrete Damage Detector - AI-powered crack detection system for infrastructure monitoring"
-                  className="w-full h-auto transition-transform duration-300"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-            <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
-              <h3 className="font-bold font-mono text-sm capitalize text-center">Concrete Damage Detector</h3>
-              <p className="text-sm font-mono normal-case text-justify">Built a YOLO-powered damage detector to spot and segment cracks in concrete — keeping buildings strong, one frame at a time.</p>
-            </SpeechBoxSolid>
-          </article>
-          <article className="w-[90vw] h-full">
-            <div className="relative group overflow-hidden w-full h-full">
-              <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
-                <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
-                <div
-                  className="absolute top-0 right-0 pointer-events-none"
-                  style={{
-                    width: 0,
-                    height: 0,
-                    borderTop: '40px solid #fff', 
-                    borderLeft: '40px solid transparent',
-                  }}
-                />
-              </div>
-              <a
-                href="https://bento-gen.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute top-0 right-0 z-30"
-                aria-label="View Bento Grid Generator project"
-              >
-                <img
-                  src={link}
-                  alt="Link to Bento Grid Generator project"
-                  className="w-10 h-10"
-                  style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
-                  loading="lazy"
-                />
-              </a>
-              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
-                <img
-                  src={bento}
-                  alt="Bento Grid Generator - UI layout tool for creating bento-style designs with live previews"
-                  className="w-full h-auto transition-transform duration-300"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-            <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
-              <h3 className="font-bold font-mono text-sm capitalize text-center">Bento Grid Generator</h3>
-              <p className="text-sm font-mono normal-case text-justify">Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.</p>
-            </SpeechBoxSolid>
-          </article>
-          <article className="w-[90vw] h-full">
-            <div className="relative group overflow-hidden w-full h-full">
-              <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
-                <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
-                <div
-                  className="absolute top-0 right-0 pointer-events-none"
-                  style={{
-                    width: 0,
-                    height: 0,
-                    borderTop: '40px solid #fff',
-                    borderLeft: '40px solid transparent',
-                  }}
-                />
-              </div>
-              <a
-                href="https://github.com/MaybeTarun/Cognify"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute top-0 right-0 z-30"
-                aria-label="View Cognify project on GitHub"
-              >
-                <img
-                  src={link}
-                  alt="Link to Cognify project"
-                  className="w-10 h-10"
-                  style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
-                  loading="lazy"
-                />
-              </a>
-              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
-                <img
-                  src={cognify}
-                  alt="Cognify - Android learning platform with AI-powered concept explanation"
-                  className="w-full h-auto transition-transform duration-300"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-            <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
-              <h3 className="font-bold font-mono text-sm capitalize text-center">Cognify</h3>
-              <p className="text-sm font-mono normal-case text-justify">Developed an Android learning platform with Kotlin and OpenAI to simplify how users learn and understand new concepts.</p>
-            </SpeechBoxSolid>
-          </article>
-          <article className="w-[90vw] h-full">
-            <div className="relative group overflow-hidden w-full h-full">
-              <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
-                <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
-                <div
-                  className="absolute top-0 right-0 pointer-events-none"
-                  style={{
-                    width: 0,
-                    height: 0,
-                    borderTop: '40px solid #fff', 
-                    borderLeft: '40px solid transparent',
-                  }}
-                />
-              </div>
-              <a
-                href="https://aaargh.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute top-0 right-0 z-30"
-                aria-label="View AAARGH!! game project"
-              >
-                <img
-                  src={link}
-                  alt="Link to AAARGH!! game project"
-                  className="w-10 h-10"
-                  style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
-                  loading="lazy"
-                />
-              </a>
-              <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
-                <video
-                  src={aaargh}
-                  className="w-full h-auto border-2 md:border-4 border-black"
-                  controls
-                  muted
-                  playsInline
-                  title="AAARGH!! - Voice-controlled flying game demonstration"
-                />
-              </div>
-            </div>
-            <SpeechBoxSolid className="w-full mt-2 text-xs font-mono text-center">
-              <h3 className="font-bold font-mono text-sm capitalize text-center">AAARGH!!</h3>
-              <p className="text-sm font-mono normal-case text-justify">Built a game where screaming 'aaaargh' actually makes you fly — no tapping, just weird noises.</p>
-            </SpeechBoxSolid>
-          </article>
-          <div className="w-full flex justify-center mt-4">
-            <Link
-              to="/projects"
-              className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
-            >
-              Check out more quests/projects
-            </Link>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* page 6 */}
-      <section className="w-full h-[50vh] md:h-[70vh] mt-32 mb-16 relative">
-        <div className="w-full h-full object-cover border-y-4 border-black overflow-hidden">
+        {/* page 6 */}
+        <section className="w-full h-[50vh] md:h-[70vh] mt-32 mb-16 relative">
+          <div className="w-full h-full object-cover border-y-4 border-black overflow-hidden">
+            <motion.img
+              src={looking}
+              alt="Tarun Gupta's development journey and achievements"
+              className="w-full h-full object-cover"
+              loading="lazy"
+              initial={{ scale: 1.2 }}
+              whileInView={{ scale: 1.0 }}
+              transition={{ duration: 1 }}
+            />
+          </div>
+          <SpeechBoxR className="absolute right-[10%] md:right-[20%] -bottom-[28rem]">
+            Now, he's bored and on the<br/>lookout for the next challenge.
+          </SpeechBoxR>
           <motion.img
-            src={looking}
-            alt="Tarun Gupta's development journey and achievements"
-            className="w-full h-full object-cover"
+            style={{ y: imgParallaxY }}
+            src={boredme}
+            alt="Tarun Gupta looking for new challenges"
+            className="absolute top-[20rem] md:top-72 left-16 w-36 md:w-48 h-36 md:h-48 border-2 md:border-4 border-black object-cover"
             loading="lazy"
-            initial={{ scale: 1.2 }}
-            whileInView={{ scale: 1.0 }}
-            transition={{ duration: 1 }}
           />
-        </div>
-        <SpeechBoxR className="absolute right-[10%] md:right-[20%] -bottom-[28rem]">
-          Now, he's bored and on the<br/>lookout for the next challenge.
-        </SpeechBoxR>
-        <motion.img
-          style={{ y: imgParallaxY }}
-          src={boredme}
-          alt="Tarun Gupta looking for new challenges"
-          className="absolute top-[20rem] md:top-72 left-16 w-36 md:w-48 h-36 md:h-48 border-2 md:border-4 border-black object-cover"
-          loading="lazy"
-        />
-      </section>
+        </section>
 
-      {/* page 7 */}
-      <section className="w-full h-fit my-16 flex flex-col items-center justify-center bg-white">
-        <div className="flex flex-row gap-16">
-          <div className="flex flex-col items-center">
-            <a
-              href="https://drive.google.com/file/d/15owSoVRzK790PvYEza7jn6GHOUDquUAf/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="box-button"
-            >
-              <div className="button">
-                <span className="text-2xl font-bold gaegu-regular">Resume</span>
-              </div>
-            </a>
-            <span className="text-[0.75rem] md:text-base font-mono text-black mt-2"></span>
+        {/* page 7 */}
+        <section className="w-full h-fit my-16 flex flex-col items-center justify-center bg-white">
+          <div className="flex flex-row gap-16">
+            <div className="flex flex-col items-center">
+              <a
+                href="https://drive.google.com/file/d/15owSoVRzK790PvYEza7jn6GHOUDquUAf/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="box-button"
+              >
+                <div className="button">
+                  <span className="text-2xl font-bold gaegu-regular">Resume</span>
+                </div>
+              </a>
+              <span className="text-[0.75rem] md:text-base font-mono text-black mt-2"></span>
+            </div>
+            <div className="flex flex-col items-center">
+              <a
+                href="mailto:tarun234.tg@gmail.com"
+                className="box-button"
+              >
+                <div className="button">
+                  <span className="text-2xl font-bold gaegu-regular">Email Me</span>
+                </div>
+              </a>
+              <span className="text-[0.75rem] md:text-base font-mono text-black mt-2">[or send a pigeon]</span>
+            </div>
           </div>
-          <div className="flex flex-col items-center">
-            <a
-              href="mailto:tarun234.tg@gmail.com"
-              className="box-button"
-            >
-              <div className="button">
-                <span className="text-2xl font-bold gaegu-regular">Email Me</span>
-              </div>
+          <div className="flex flex-row justify-center items-center gap-6 mb-8 md:mb-16 mt-4 md:mt-8">
+            <a href="https://linkedin.com/in/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <img src={LinkedinLogo} alt="LinkedIn" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
             </a>
-            <span className="text-[0.75rem] md:text-base font-mono text-black mt-2">[or send a pigeon]</span>
+            <a href="https://github.com/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <img src={GithubLogo} alt="GitHub" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
+            </a>
+            <a href="https://twitter.com/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <img src={XLogo} alt="X (Twitter)" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
+            </a>
           </div>
-        </div>
-        <div className="flex flex-row justify-center items-center gap-6 mb-8 md:mb-16 mt-4 md:mt-8">
-          <a href="https://linkedin.com/in/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <img src={LinkedinLogo} alt="LinkedIn" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
-          </a>
-          <a href="https://github.com/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <img src={GithubLogo} alt="GitHub" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
-          </a>
-          <a href="https://twitter.com/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-            <img src={XLogo} alt="X (Twitter)" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
-          </a>
-        </div>
-        <PageNumberControl />
-      </section>
-    </div>
+          <PageNumberControl />
+        </section>
+      </div>
+    </>
   );
 }
 
@@ -838,7 +925,7 @@ function PageNumberControl() {
       >
         <TiArrowSortedUp style={{ transform: 'rotate(-90deg)' }} />
       </button>
-      <div className="px-6 py-2 border-2 border-black bg-white text-lg font-mono font-bold">
+      <div className="px-6 py-2 border-2 border-black bg-white text-lg gaegu-bold">
         Page {page} of {totalPages}
       </div>
       <button
