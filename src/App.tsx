@@ -13,6 +13,7 @@ import XLogo from './assets/XLogo.svg';
 import GithubLogo from './assets/GithubLogo.svg';
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Lenis from '@studio-freight/lenis';
 import kid from './assets/kid.webp';
 import awakening from './assets/awakening.webp';
@@ -69,6 +70,36 @@ function App() {
   const { scrollY } = useViewportScroll();
   const imgParallaxY = useTransform(scrollY, value => -value * 0.09);
 
+  const [rotation, setRotation] = useState({ initial: -20, whileInView: -12 });
+
+  const [arrowRotation, setArrowRotation] = useState({ initial: 110, whileInView: 90 });
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 768) {
+        setRotation({ initial: 25, whileInView: 20 });
+      } else {
+        setRotation({ initial: -20, whileInView: -12 });
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    function handleArrowResize() {
+      if (window.innerWidth < 768) {
+        setArrowRotation({ initial: 110, whileInView: 90 });
+      } else {
+        setArrowRotation({ initial: 60, whileInView: 40 });
+      }
+    }
+    handleArrowResize();
+    window.addEventListener('resize', handleArrowResize);
+    return () => window.removeEventListener('resize', handleArrowResize);
+  }, []);
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     const timer = setTimeout(() => {
@@ -123,27 +154,52 @@ function App() {
 
       {/* page 2 */}
       <section className="relative w-full h-[30vh] md:h-[40vh] md:mt-16" aria-label="Development Journey">
-        <img
-          src={awakening}
-          alt="Tarun Gupta's development journey and training in coding"
-          className="border-y-4 border-black w-full h-full object-cover"
-          loading="lazy"
-        />
+        <div className="border-y-4 border-black w-full h-full object-cover overflow-hidden">
+          <motion.img
+            src={awakening}
+            alt="Tarun Gupta's development journey and training in coding"
+            className="w-full h-full object-cover"
+            loading="lazy"
+            initial={{ scale: 1.2 }}
+            whileInView={{ scale: 1.0 }}
+            transition={{ duration: 1 }}
+          />
+        </div>
         <SpeechBoxL className="absolute -bottom-28 right-4 md:right-16">
           He trained in the sacred arts of code,<br />logic, and late-night debugging.
         </SpeechBoxL>
       </section>
 
 
-      <section className="relative w-full h-[35vh] md:h-[45vh] mt-32 mb-16" aria-label="Developer Skills">
-        <img
-          src={sky}
-          alt="Tarun Gupta showcasing developer skills and expertise"
-          className="border-y-4 border-black w-full h-full object-cover relative"
+      <section className="relative w-full h-[30vh] md:h-[45vh] mt-32 mb-16" aria-label="Developer Skills">
+        <div className="border-y-4 border-black w-full h-full object-cover relative overflow-hidden">
+          <motion.img
+            src={sky}
+            alt="Tarun Gupta showcasing developer skills and expertise"
+            className="w-full h-full object-cover"
+            loading="lazy"
+            initial={{ scale: 1.2 }}
+            whileInView={{ scale: 1.0 }}
+            transition={{ duration: 1 }}
+          />
+        </div>
+        <motion.img
+          src={flyingTarun}
+          alt="Tarun Gupta flying character illustration"
+          className="absolute h-12 md:h-36 w-auto rotate-[20deg] md:-rotate-12 -top-4 -left-4 md:left-4 scale-125"
           loading="lazy"
+          initial={{ x: -40, rotate: rotation.initial + 'deg' }}
+          whileInView={{ x: 0, rotate: rotation.whileInView + 'deg' }}
+          transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
         />
-        <img src={flyingTarun} alt="Tarun Gupta flying character illustration" className="absolute h-12 md:h-36 w-auto rotate-[20deg] md:-rotate-12 -top-4 -left-4 md:left-4 scale-125" loading="lazy" />
-        <img src={bug} alt="Bug illustration" className="absolute h-16 md:h-28 cursor-pointer w-auto bottom-4 md:bottom-8 right-8 md:right-20" loading="lazy" 
+        <motion.img
+          src={bug}
+          alt="Bug illustration"
+          className="absolute h-16 md:h-28 cursor-pointer w-auto bottom-4 md:bottom-8 right-8 md:right-20"
+          loading="lazy"
+          initial={{ x: 40 }}
+          whileInView={{ x: 0 }}
+          transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
           onClick={() => {
             alert('soon will be a shooter game');
           }}
@@ -159,16 +215,20 @@ function App() {
             <SpeechBox className="relative mt-16">
               his arsenal only grew bigger
             </SpeechBox>
-            <img 
+            <motion.img 
+              key={arrowRotation.initial}
               src={arrow} 
               alt="Arrow pointing to skills section" 
-              className="absolute -bottom-14 md:-bottom-20 right-56 md:right-8 w-20 md:w-32 h-auto rotate-90 md:rotate-[40deg]"
+              className="absolute -bottom-14 md:-bottom-20 right-56 md:right-8 w-20 md:w-32 h-auto"
               loading="lazy"
+              initial={{ rotate: arrowRotation.initial }}
+              whileInView={{ rotate: arrowRotation.whileInView }}
+              transition={{ duration: 0.5 }}
             />
           </div>
           <div className="flex-1 flex items-center justify-end mt-24 md:mt-0">
             <div
-              className="w-full border-2 md:border-4 border-r-0 border-black p-6 ml-4 md:ml-20 flex flex-col gap-4 md:gap-6 bg-white relative"
+              className="w-full border-y-2 border-l-2 md:border-l-4 md:border-y-4 border-r-0 border-black p-6 ml-4 md:ml-20 flex flex-col gap-4 md:gap-6 bg-white relative"
               style={{
                 backgroundImage: `url(${skillbg})`,
                 backgroundSize: 'cover',
@@ -178,26 +238,56 @@ function App() {
               <h2 className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white border-2 border-black px-8 py-2 text-2xl font-bold gaegu-bold">
                 #SKILLS
               </h2>
-              <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-sm md:text-xl font-mono capitalize rounded-xl">
-                <span className="flex-1">web development</span>
-                <AvatarCircles avatarUrls={webDevAvatars} numPeople={99} />
-              </div>
-              <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-sm md:text-xl font-mono capitalize rounded-xl">
-                <span className="flex-1">android development</span>
-                <AvatarCircles avatarUrls={androidDevAvatars} numPeople={99} />
-              </div>
-              <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-sm md:text-xl font-mono capitalize rounded-xl">
-                <span className="flex-1">cloud computing</span>
-                <AvatarCircles avatarUrls={cloudAvatars} numPeople={99} />
-              </div>
-              <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-sm md:text-xl font-mono capitalize rounded-xl">
-                <span className="flex-1">programming languages</span>
-                <AvatarCircles avatarUrls={programmingAvatars} numPeople={99} />
-              </div>
-              <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-sm md:text-xl font-mono capitalize rounded-xl">
-                <span className="flex-1">UI/UX designing</span>
-                <AvatarCircles avatarUrls={uiuxAvatars} numPeople={99} />
-              </div>
+              <motion.div
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
+                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+              >
+                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                  <span className="flex-1">web development</span>
+                  <AvatarCircles avatarUrls={webDevAvatars} numPeople={99} />
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
+                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+              >
+                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                  <span className="flex-1">android development</span>
+                  <AvatarCircles avatarUrls={androidDevAvatars} numPeople={99} />
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
+                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+              >
+                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                  <span className="flex-1">cloud computing</span>
+                  <AvatarCircles avatarUrls={cloudAvatars} numPeople={99} />
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
+                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+              >
+                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                  <span className="flex-1">programming languages</span>
+                  <AvatarCircles avatarUrls={programmingAvatars} numPeople={99} />
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
+                transition={{ type: 'spring', stiffness: 60, damping: 12 }}
+              >
+                <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
+                  <span className="flex-1">UI/UX designing</span>
+                  <AvatarCircles avatarUrls={uiuxAvatars} numPeople={99} />
+                </div>
+              </motion.div>
             </div>
         </div>
       </section>
@@ -205,12 +295,17 @@ function App() {
       {/* page 4 */}
       <section className="w-full h-fit flex items-center justify-start bg-white my-16" aria-label="Project Journey">
         <div className="md:w-2/3 flex items-center justify-center relative">
-          <img
-            src={quests}
-            alt="Tarun Gupta embarking on development projects and challenges"
-            className="relative w-full h-auto border-2 md:border-4 border-l-0 border-black"
-            loading="lazy"
-          />
+          <div className="relative w-full h-auto border-2 md:border-4 border-l-0 border-black overflow-hidden">
+            <motion.img
+              src={quests}
+              alt="Tarun Gupta embarking on development projects and challenges"
+              className="w-full h-auto"
+              loading="lazy"
+              initial={{ scale: 1.2 }}
+              whileInView={{ scale: 1.0 }}
+              transition={{ duration: 1 }}
+            />
+          </div>
           <SpeechBoxLL className="absolute top-[20rem] -right-[60%] hidden md:block">
             With his powers now honed, Tarun<br/>sets off on <span className='gaegu-bold'>quests</span> that tests both<br/>his logic and caffeine limits.
           </SpeechBoxLL>
@@ -222,11 +317,11 @@ function App() {
       </section>
 
       {/* page 5 for >md */}
-      <section className="w-full h-fit flex flex-row items-center justify-center bg-white my-32 relative hidden md:flex" aria-label="Portfolio Projects">
+      <section className="w-full h-fit flex-row items-center justify-center bg-white my-32 relative hidden md:flex" aria-label="Portfolio Projects">
         <div className="flex flex-col md:flex-row gap-8">
           <motion.div
             className="flex flex-col gap-8 md:mt-12 relative"
-            initial={{ y: 40 }}
+            initial={{ y: 60 }}
             whileInView={{ y: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12 }}
           >
@@ -324,19 +419,17 @@ function App() {
           </motion.div>
           <motion.div
             className="flex flex-col gap-8 -mt-12 relative"
-            initial={{ y: -40 }}
+            initial={{ y: -60 }}
             whileInView={{ y: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12 }}
           >
             <div className="absolute left-1/2 bottom-0 -translate-x-1/2 z-10">
-              <a 
-                href="https://maybetarun.in/projects" 
-                target="_blank" 
-                rel="noopener noreferrer"
+              <Link
+                to="/projects"
                 className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
               >
                 Check out more quests/projects
-              </a>
+              </Link>
             </div>
             <article>
               <div className="relative group overflow-hidden">
@@ -610,28 +703,30 @@ function App() {
               <p className="text-sm font-mono normal-case text-justify">Built a game where screaming 'aaaargh' actually makes you fly — no tapping, just weird noises.</p>
             </SpeechBoxSolid>
           </article>
-          {/* Button */}
           <div className="w-full flex justify-center mt-4">
-            <a 
-              href="https://maybetarun.in/projects" 
-              target="_blank" 
-              rel="noopener noreferrer"
+            <Link
+              to="/projects"
               className="bg-black text-white border-2 md:border-4 border-black px-6 py-3 font-bold gaegu-regular hover:bg-white hover:text-black transition-colors duration-300 text-xl whitespace-nowrap inline-block"
             >
               Check out more quests/projects
-            </a>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* page 6 */}
       <section className="w-full h-[50vh] md:h-[70vh] mt-32 mb-16 relative">
-        <img
-          src={looking}
-          alt="Tarun Gupta's development journey and achievements"
-          className="w-full h-full object-cover border-y-4 border-black"
-          loading="lazy"
-        />
+        <div className="w-full h-full object-cover border-y-4 border-black overflow-hidden">
+          <motion.img
+            src={looking}
+            alt="Tarun Gupta's development journey and achievements"
+            className="w-full h-full object-cover"
+            loading="lazy"
+            initial={{ scale: 1.2 }}
+            whileInView={{ scale: 1.0 }}
+            transition={{ duration: 1 }}
+          />
+        </div>
         <SpeechBoxR className="absolute right-[10%] md:right-[20%] -bottom-[28rem]">
           Now, he's bored and on the<br/>lookout for the next challenge.
         </SpeechBoxR>

@@ -71,3 +71,55 @@ body::-webkit-scrollbar {
     font-size: 1.5rem;
   }
 }
+
+.project-shiftL {
+  transform: translateY(-5rem);
+}
+
+.project-shiftR {
+  transform: translateY(-7.5rem);
+}
+
+.project-shiftL2 {
+  transform: translateY(-10rem);
+}
+
+.project-shiftL3 {
+  transform: translateY(-8rem);
+}
+
+.project-shiftR2 {
+  transform: translateY(-10rem);
+}
+
+.project-shiftR3 {
+  transform: translateY(-13.5rem);
+}
+
+.project-shiftR4 {
+  transform: translateY(0rem);
+}
+
+@media (width <= 48rem) {
+  .project-shiftL {
+    transform: translateY(-3rem);
+  }
+  .project-shiftL2 {
+    transform: translateY(-6rem);
+  }
+  .project-shiftL3 {
+    transform: translateY(0rem);
+  }
+  .project-shiftR {
+    transform: translateY(-4.5rem);
+  }
+  .project-shiftR2 {
+    transform: translateY(-6rem);
+  }
+  .project-shiftR3 {
+    transform: translateY(-4.5rem);
+  }
+  .project-shiftR4 {
+    transform: translateY(4rem);
+  }
+}
