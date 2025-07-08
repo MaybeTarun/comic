@@ -134,7 +134,7 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-white px-4 relative">
+    <div className="w-full min-h-screen flex flex-col items-center bg-white relative">
       <div className="absolute top-2 right-4 z-30 text-black gaegu-regular text-lg md:text-xl">
         Total Reads: <span className='underline'>100</span>
       </div>
