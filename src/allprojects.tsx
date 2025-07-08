@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import concrete from './assets/concrete.png';
-import bento from './assets/Bento.png';
+import bento from './assets/bento.png';
 import foresty from './assets/Foresty.png';
 import finance from './assets/Finance.png';
 import aaargh from './assets/Aaargh.png';
