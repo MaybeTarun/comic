@@ -13,7 +13,7 @@ import XLogo from './assets/XLogo.svg';
 import GithubLogo from './assets/GithubLogo.svg';
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Lenis from '@studio-freight/lenis';
 import kid from './assets/kid.webp';
 import awakening from './assets/awakening.webp';
@@ -22,6 +22,7 @@ import sky from './assets/sky.webp';
 import looking from './assets/looking.webp';
 import boredme from './assets/boredme.webp';
 import bug from './assets/bug.webp';
+import { TiArrowSortedUp } from 'react-icons/ti';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -133,7 +134,10 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full h-full bg-white flex items-center justify-center flex-col">
+    <div className="w-full min-h-screen flex flex-col items-center bg-white px-4 relative">
+      <div className="absolute top-2 right-4 z-30 text-black gaegu-regular text-lg md:text-xl">
+        Total Reads: <span className='underline'>100</span>
+      </div>
       {/* page 1 */}
       <section className="relative w-full h-dvh flex justify-center items-center" aria-label="Introduction">
         <motion.img
@@ -740,7 +744,7 @@ function App() {
       </section>
 
       {/* page 7 */}
-      <section className="w-full h-fit my-16 md:my-32 flex flex-col items-center justify-center bg-white">
+      <section className="w-full h-fit my-16 flex flex-col items-center justify-center bg-white">
         <div className="flex flex-row gap-16">
           <div className="flex flex-col items-center">
             <a
@@ -767,7 +771,7 @@ function App() {
             <span className="text-[0.75rem] md:text-base font-mono text-black mt-2">[or send a pigeon]</span>
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center gap-6 mb-16 mt-8">
+        <div className="flex flex-row justify-center items-center gap-6 mb-8 md:mb-16 mt-4 md:mt-8">
           <a href="https://linkedin.com/in/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <img src={LinkedinLogo} alt="LinkedIn" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
           </a>
@@ -778,9 +782,47 @@ function App() {
             <img src={XLogo} alt="X (Twitter)" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
           </a>
         </div>
+        <PageNumberControl />
       </section>
     </div>
   );
 }
 
 export default App;
+
+function PageNumberControl() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isProjects = location.pathname === '/projects';
+  const page = isProjects ? 2 : 1;
+  const totalPages = 2;
+  const handlePrev = () => {
+    if (page === 2) navigate('/', { state: { scrollTo: 'bottom' } });
+  };
+  const handleNext = () => {
+    if (page === 1) navigate('/projects');
+  };
+  return (
+    <div className="flex flex-row items-center justify-center gap-2 md:gap-4">
+      <button
+        onClick={handlePrev}
+        className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black bg-white text-2xl font-bold disabled:opacity-30"
+        disabled={page === 1}
+        aria-label="Previous Page"
+      >
+        <TiArrowSortedUp style={{ transform: 'rotate(-90deg)' }} />
+      </button>
+      <div className="px-6 py-2 border-2 border-black bg-white text-lg font-mono font-bold">
+        Page {page} of {totalPages}
+      </div>
+      <button
+        onClick={handleNext}
+        className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black bg-white text-2xl font-bold disabled:opacity-30"
+        disabled={page === totalPages}
+        aria-label="Next Page"
+      >
+        <TiArrowSortedUp style={{ transform: 'rotate(90deg)' }} />
+      </button>
+    </div>
+  );
+}
