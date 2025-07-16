@@ -15,7 +15,6 @@ import Colorizer from './assets/Colorizer.png';
 import Revo from './assets/Revo.png';
 import knowabout from './assets/knowabout.png';
 import payback from './assets/payback.png';
-// import downloads from './assets/500.png';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const TABS = [
@@ -65,7 +64,7 @@ const PROJECTS = {
     image: aaargh,
     name: 'Aaargh!!',
     desc: 'A voice-controlled game inspired by Flappy Bird, where you guide the player by making weird noises like "aaaah" or "aargh". Fun, chaotic, and a great way to test your vocal skills!',
-    link: 'https://www.maybetarun.in/projects/aaargh', 
+    link: 'https://aaargh.vercel.app/', 
   },
   mana: {
     image: mana,

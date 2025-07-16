@@ -113,14 +113,12 @@ function App() {
     // const favicon = document.getElementById('dynamic-favicon');
     // function handleVisibility() {
     //   if (!favicon) return;
-    //   // Use absolute path to avoid issues
     //   favicon.setAttribute(
     //     'href',
     //     document.visibilityState === 'visible' ? '/favicon2.webp' : '/favicon.webp'
     //   );
     // }
     // document.addEventListener('visibilitychange', handleVisibility);
-    // // Set initial state
     // handleVisibility();
     // return () => {
     //   document.removeEventListener('visibilitychange', handleVisibility);
@@ -320,6 +318,8 @@ function App() {
               alert('soon will be a shooter game');
             }}
           />
+          <div className='absolute bottom-4 left-8 gaegu-regular text-white text-base md:text-2xl'>[ Part time bug killer ]</div>
+
           <div className='absolute rotate-[20deg] md:-rotate-[20deg] top-12 left-[28%] text-6xl gaegu-regular text-[#FFD403]'><span className='text-4xl md:text-6xl'>W</span><span className='text-5xl md:text-7xl'>O</span><span className='text-6xl md:text-8xl'>O</span><span className='text-6xl md:text-8xl'>!</span></div>
         </section>
 
@@ -637,7 +637,7 @@ function App() {
           </div>
         </section>
 
-        {/* page 5 for <md> */}
+        {/* page 5 for < md */}
         <section className="w-full flex flex-col items-center justify-center bg-white my-16 md:hidden" aria-label="Portfolio Projects Mobile">
           <div className="w-full flex flex-col items-center gap-8">
             <div className="w-full flex justify-center">
