@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import concrete from './assets/concrete.png';
 import bento from './assets/bento.png';
@@ -16,6 +15,7 @@ import Revo from './assets/Revo.png';
 import knowabout from './assets/knowabout.png';
 import payback from './assets/payback.png';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const TABS = [
   { key: 'web', label: 'Web Development' },
@@ -44,7 +44,7 @@ const PROJECTS = {
   },
   bento: {
     image: bento,
-    name: 'Bento Grid Generator',
+    name: 'BentoGen',
     desc: 'Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.',
     link: 'https://bento-gen.vercel.app/',
   },
@@ -74,7 +74,7 @@ const PROJECTS = {
   },
   surgeon: {
     image: surgeon,
-    name: 'Surgeon Portfolio',
+    name: 'Portfolio for a Surgeon',
     desc: 'A modern, responsive portfolio website designed and developed for a doctor as part of my freelance work. Highlights expertise, services, and achievements in a clean, professional layout.',
     link: 'https://www.surgeonrkl.com/', 
   },
@@ -123,14 +123,7 @@ const PROJECTS = {
 };
 
 const DUMMY_PROJECTS: Record<TabKey, Project[]> = {
-  web: [
-    PROJECTS.bento,
-    PROJECTS.foresty,
-    PROJECTS.finance,
-    PROJECTS.aaargh,
-    PROJECTS.mana,
-    PROJECTS.surgeon,
-  ],
+  web: [PROJECTS.bento, PROJECTS.foresty, PROJECTS.finance, PROJECTS.aaargh, PROJECTS.mana, PROJECTS.surgeon,],
   android: [PROJECTS.cognify, PROJECTS.holostry],
   python: [PROJECTS.concrete, PROJECTS.sentiment, PROJECTS.colorizer],
   npm: [PROJECTS.revo, PROJECTS.knowabout, PROJECTS.payback],
@@ -138,17 +131,66 @@ const DUMMY_PROJECTS: Record<TabKey, Project[]> = {
   uiux: [PROJECTS.bento, PROJECTS.concrete, PROJECTS.bento, PROJECTS.concrete, PROJECTS.bento, PROJECTS.concrete],
 };
 
+const tabOrder: TabKey[] = TABS.map(t => t.key);
+const totalPages = tabOrder.length + 1;
+
 const AllProjects = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const getInitialPage = () => {
+    if (location.state && typeof location.state.page === 'number') {
+      return location.state.page;
+    }
+    return 2;
+  };
+  const [page, setPage] = useState(getInitialPage);
+  const [tabKey, setTabKey] = useState(0);
+  const [activeTab, setActiveTab] = useState<TabKey>(tabOrder[getInitialPage() - 2] || 'web');
+
+  useEffect(() => {
+    if (page === 1) return;
+    const tabIdx = page - 2;
+    if (tabOrder[tabIdx] && activeTab !== tabOrder[tabIdx]) {
+      setActiveTab(tabOrder[tabIdx]);
+      setTabKey(prev => prev + 1);
+    }
+    // eslint-disable-next-line
+  }, [page]);
+
+  useEffect(() => {
+    const tabIdx = tabOrder.indexOf(activeTab);
+    if (tabIdx !== -1 && page !== tabIdx + 2) {
+      setPage(tabIdx + 2);
+    }
+    // eslint-disable-next-line
+  }, [activeTab]);
+
+  const handleTabChange = (tab: TabKey) => {
+    setActiveTab(tab);
+    setTabKey(prev => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (page === 1) return;
+    if (page === 2) {
+      navigate('/', { state: { page: 1 } });
+    } else {
+      setPage(page - 1);
+    }
+  };
+  const handleNextPage = () => {
+    if (page === totalPages) return;
+    if (page === 1) {
+      navigate('/projects', { state: { page: 2 } });
+    } else {
+      setPage(page + 1);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const [activeTab, setActiveTab] = useState<TabKey>('web');
-  const [tabKey, setTabKey] = useState(0);
-
-  const handleTabChange = (tab: TabKey) => {
-    setTabKey(prev => prev + 1);
-    setActiveTab(tab);
-  };
 
   return (
     <motion.div
@@ -183,78 +225,40 @@ const AllProjects = () => {
           transition={{ duration: 0.5 }}
           className="w-full h-full z-0"
         >
-          {activeTab === 'web' ? (
-            <div className="w-full md:w-[80vw] mx-auto flex flex-col gap-0 md:gap-4 items-center justify-center md:flex-row md:p-2 -mb-24">
-              <div className="flex flex-col gap-4 w-full md:w-1/2">
-                {DUMMY_PROJECTS[activeTab].slice(0, 3).map((proj, idx) => {
-                  let clip = '';
-                  if (idx === 0) {
-                    clip = 'polygon(0 0, 100% 0, 100% 80%, 5% 100%)';
-                  } else if (idx === 1) {
-                    clip = 'polygon(5% 20%, 100% 0, 100% 95%, 5% 90%)';
-                  } else {
-                    clip = 'polygon(5% 10%, 100% 15%, 100% 100%, 0% 100%)';
-                  }
-                  return (
-                    <div
-                      key={idx}
-                      className={`w-full relative flex items-center justify-center ${idx === 1 ? 'project-shiftL' : ''} ${idx === 2 ? 'project-shiftL2' : ''}`}
-                      style={{
-                        clipPath: clip,
-                        background: 'black',
-                        padding: '4px',
-                      }}
+          {activeTab !== 'uiux' ? (
+            <div className="w-full md:w-[80vw] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center md:p-2 mb-8 md:mb-16">
+              {DUMMY_PROJECTS[activeTab].slice(0, 4).map((proj, idx) => (
+                <div
+                  key={idx}
+                  className="w-full relative flex items-center justify-center group overflow-hidden border-4 border-black"
+                >
+                  <div className="absolute top-0 md:top-2 left-2 md:left-4 z-20 gaegu-bold uppercase text-base md:text-2xl font-bold text-white">
+                    {proj.name}
+                  </div>
+                  <img
+                    src={proj.image}
+                    alt={proj.name}
+                    className="w-full h-auto object-contain bg-white cursor-pointer transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 pointer-events-none bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10" />
+                  <div className="absolute top-10 md:top-16 left-2 md:left-4 flex flex-col items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 w-[80%]">
+                    <p className="text-base md:text-lg text-white mb-4 md:mb-8 w-full gaegu-regular">
+                      {proj.desc}
+                    </p>
+                    <a
+                      href={proj.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block px-2 md:px-4 md:py-1 bg-white text-black gaegu-regular border-2 md:border-4 border-black hover:bg-black hover:text-white transition-colors duration-200"
                     >
-                      <img
-                        src={proj.image}
-                        alt={proj.name}
-                        className="w-full h-auto object-contain bg-white cursor-pointer"
-                        onClick={() => window.open(proj.link, '_blank')}
-                        style={{
-                          clipPath: clip,
-                        }}
-                        loading="lazy"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex flex-col gap-4 w-full md:w-1/2 -mt-[4.5rem] md:mt-0">
-                {DUMMY_PROJECTS[activeTab].slice(3, 6).map((proj, idx) => {
-                  let clip = '';
-                  if (idx === 0) {
-                    clip = 'polygon(0 0, 100% 0, 95% 100%, 0 70%)';
-                  } else if (idx === 1) {
-                    clip = 'polygon(0 0, 95% 30%, 95% 90%, 0% 100%)';
-                  } else {
-                    clip = 'polygon(0 10%, 95% 0, 100% 100%, 0% 100%)';
-                  }
-                  return (
-                    <div
-                      key={idx}
-                      className={`w-full relative flex items-center justify-center ${idx === 1 ? 'project-shiftR' : ''} ${idx === 2 ? 'project-shiftR2' : ''}`}
-                      style={{
-                        clipPath: clip,
-                        background: 'black',
-                        padding: '4px',
-                      }}
-                    >
-                      <img
-                        src={proj.image}
-                        alt={proj.name}
-                        className="w-full h-auto object-contain bg-white cursor-pointer"
-                        onClick={() => window.open(proj.link, '_blank')}
-                        style={{
-                          clipPath: clip,
-                        }}
-                        loading="lazy"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+                      View Project
+                    </a>
+                  </div>
+                </div>
+              ))}
             </div>
-          ) : activeTab === 'uiux' ? (
+          ) : (
             <div className="w-full md:w-[80vw] mx-auto flex flex-col gap-0 md:gap-4 items-center justify-center md:flex-row md:p-2 -mb-24">
               <div className="flex flex-col gap-4 w-full md:w-1/2">
                 {DUMMY_PROJECTS[activeTab].slice(0, 3).map((proj, idx) => {
@@ -269,7 +273,7 @@ const AllProjects = () => {
                   return (
                     <div
                       key={idx}
-                      className={`w-full relative flex items-center justify-center ${idx === 1 ? 'project-shiftL' : ''} ${idx === 2 ? 'project-shiftL2' : ''}`}
+                      className={`w-full relative flex items-center justify-center${idx === 1 ? ' project-shiftL' : ''}${idx === 2 ? ' project-shiftL2' : ''}`}
                       style={{
                         clipPath: clip,
                         background: 'black',
@@ -303,7 +307,7 @@ const AllProjects = () => {
                   return (
                     <div
                       key={idx}
-                      className={`w-full relative flex items-center justify-center ${idx === 1 ? 'project-shiftR' : ''} ${idx === 2 ? 'project-shiftR2' : ''}`}
+                      className={`w-full relative flex items-center justify-center${idx === 1 ? ' project-shiftR' : ''}${idx === 2 ? ' project-shiftR2' : ''}`}
                       style={{
                         clipPath: clip,
                         background: 'black',
@@ -325,188 +329,37 @@ const AllProjects = () => {
                 })}
               </div>
             </div>
-          ) : activeTab === 'android' ? (
-            <div className="w-full md:w-[80vw] mx-auto flex flex-col md:flex-row gap-4 items-center justify-center mb-16">
-              {DUMMY_PROJECTS.android.map((proj, idx) => {
-                const clip = idx === 0
-                  ? 'polygon(5% 0, 100% 0, 100% 90%, 0% 100%)'
-                  : 'polygon(0 10%, 100% 0, 95% 100%, 0% 100%)';
-                return (
-                  <div
-                    key={idx}
-                    className={`w-full md:w-1/2 relative flex items-center justify-center ${idx === 0 ? 'md:-mb-12' : '-mt-6 md:mt-0'}`}
-                    style={{
-                      clipPath: clip,
-                      background: 'black',
-                      padding: '4px',
-                    }}
-                  >
-                    <img
-                      src={proj.image}
-                      alt={proj.name}
-                      className="w-full h-auto object-contain bg-white cursor-pointer"
-                      onClick={() => window.open(proj.link, '_blank')}
-                      style={{
-                        clipPath: clip,
-                      }}
-                      loading="lazy"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          ) : activeTab === 'python' ? (
-            <div className="w-full md:w-[80vw] mx-auto flex flex-col gap-0 md:gap-4 items-center justify-center md:flex-row md:p-2 -mb-32">
-              <div className="flex flex-col gap-4 w-full md:w-1/2">
-                {(DUMMY_PROJECTS.python as Project[]).slice(0, 1).map((proj: Project, idx: number) => {
-                  const clip = 'polygon(0 0, 100% 10%, 100% 100%, 5% 100%)';
-                  return (
-                    <div
-                      key={idx}
-                      className="w-full relative flex items-center justify-center project-shiftL3"
-                      style={{
-                        background: 'black',
-                        padding: '4px',
-                        clipPath: clip,
-                      }}
-                    >
-                      <img
-                        src={proj.image}
-                        alt={proj.name}
-                        className="w-full object-contain bg-white cursor-pointer"
-                        onClick={() => window.open(proj.link, '_blank')}
-                        style={{ height: '150%', clipPath: clip }}
-                        loading="lazy"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex flex-col gap-4 w-full md:w-1/2 -mt-[3rem] md:mt-0">
-                {(DUMMY_PROJECTS.python as Project[]).slice(1, 3).map((proj: Project, idx: number) => {
-                  const clip = idx === 0
-                    ? 'polygon(0 0, 100% 0%, 100% 70%, 0 80%)'
-                    : 'polygon(0 30%, 100% 20%, 90% 100%, 0% 100%)';
-                  return (
-                    <div
-                      key={idx}
-                      className={`w-full relative flex items-center justify-center ${idx === 1 ? 'project-shiftR3' : 'project-shiftR4'}`}
-                      style={{
-                        background: 'black',
-                        padding: '4px',
-                        clipPath: clip,
-                      }}
-                    >
-                      <img
-                        src={proj.image}
-                        alt={proj.name}
-                        className="w-full h-auto object-contain bg-white cursor-pointer"
-                        onClick={() => window.open(proj.link, '_blank')}
-                        style={{ clipPath: clip }}
-                        loading="lazy"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : activeTab === 'npm' ? (
-            <div className="w-full md:w-[80vw] mx-auto flex flex-col-reverse md:flex-row gap-0 md:gap-4 items-center justify-center md:p-2 -mb-32">
-              <div className="flex flex-col gap-4 w-full md:w-1/2 -mt-[3rem] md:mt-0">
-                {(DUMMY_PROJECTS.npm as Project[]).slice(1, 3).map((proj: Project, idx: number) => {
-                  const clip = idx === 0
-                    ? 'polygon(0 0, 100% 0%, 100% 70%, 0 80%)'
-                    : 'polygon(0 30%, 100% 20%, 100% 100%, 10% 100%)';
-                  return (
-                    <div
-                      key={idx}
-                      className={`w-full relative flex items-center justify-center ${idx === 1 ? 'project-shiftR3' : 'project-shiftR4'}`}
-                      style={{
-                        background: 'black',
-                        padding: '4px',
-                        clipPath: clip,
-                      }}
-                    >
-                      <img
-                        src={proj.image}
-                        alt={proj.name}
-                        className="w-full h-auto object-contain bg-white cursor-pointer"
-                        onClick={() => window.open(proj.link, '_blank')}
-                        style={{ clipPath: clip }}
-                        loading="lazy"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex flex-col gap-4 w-full md:w-1/2">
-                {(DUMMY_PROJECTS.npm as Project[]).slice(0, 1).map((proj: Project, idx: number) => {
-                  const clip = 'polygon(0 0, 95% 10%, 100% 100%, 0% 100%)';
-                  return (
-                    <div
-                      key={idx}
-                      className="w-full relative flex items-center justify-center project-shiftL3 overflow-visible"
-                      style={{
-                        background: 'black',
-                        padding: '4px',
-                        clipPath: clip,
-                      }}
-                    >
-                      <img
-                        src={proj.image}
-                        alt={proj.name}
-                        className="w-full object-contain bg-white cursor-pointer"
-                        onClick={() => window.open(proj.link, '_blank')}
-                        style={{ height: '150%', clipPath: clip }}
-                        loading="lazy"
-                      />
-                      {/* <img className='absolute -top-6 -left-6 h-16 z-50' src={downloads}/> */}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            <div className="w-full md:w-[80vw] mx-auto flex flex-col gap-4 items-center justify-center">
-              {(DUMMY_PROJECTS[activeTab as TabKey] as Project[]).map((proj: Project, idx: number) => (
-                <img
-                  key={idx}
-                  src={proj.image}
-                  alt={proj.name}
-                  className="w-full h-auto object-contain bg-white border border-black rounded-xl cursor-pointer"
-                  onClick={() => window.open(proj.link, '_blank')}
-                  loading="lazy"
-                />
-              ))}
-            </div>
           )}
         </motion.div>
       </AnimatePresence>
-      <PageNumberControl />
+      <PageNumberControl
+        page={page}
+        totalPages={totalPages}
+        onPrev={handlePrevPage}
+        onNext={handleNextPage}
+        disablePrev={page === 1}
+        disableNext={page === totalPages}
+      />
     </motion.div>
   );
 };
 
-export default AllProjects; 
+export default AllProjects;
 
-function PageNumberControl() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isProjects = location.pathname === '/projects';
-  const page = isProjects ? 2 : 1;
-  const totalPages = 2;
-  const handlePrev = () => {
-    if (page === 2) navigate('/', { state: { scrollTo: 'bottom' } });
-  };
-  const handleNext = () => {
-    if (page === 1) navigate('/projects');
-  };
+function PageNumberControl({ page, totalPages, onPrev, onNext, disablePrev, disableNext }: {
+  page: number;
+  totalPages: number;
+  onPrev: () => void;
+  onNext: () => void;
+  disablePrev: boolean;
+  disableNext: boolean;
+}) {
   return (
-    <div className="flex flex-row items-center justify-center gap-4 mb-16">
+    <div className="flex flex-row items-center justify-center gap-4 mb-8 md:mb-16">
       <button
-        onClick={handlePrev}
+        onClick={onPrev}
         className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black bg-white text-2xl font-bold disabled:opacity-30"
-        disabled={page === 1}
+        disabled={disablePrev}
         aria-label="Previous Page"
       >
         <TiArrowSortedUp style={{ transform: 'rotate(-90deg)' }} />
@@ -515,9 +368,9 @@ function PageNumberControl() {
         Page {page} of {totalPages}
       </div>
       <button
-        onClick={handleNext}
+        onClick={onNext}
         className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black bg-white text-2xl font-bold disabled:opacity-30"
-        disabled={page === totalPages}
+        disabled={disableNext}
         aria-label="Next Page"
       >
         <TiArrowSortedUp style={{ transform: 'rotate(90deg)' }} />
