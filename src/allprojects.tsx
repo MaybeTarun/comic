@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import { TiArrowSortedUp } from 'react-icons/ti';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
+import CachedImage from './components/CachedImage';
+
 import concrete from './assets/concrete.png';
 import bento from './assets/bento.png';
 import foresty from './assets/Foresty.png';
@@ -14,8 +18,7 @@ import Colorizer from './assets/Colorizer.png';
 import Revo from './assets/Revo.png';
 import knowabout from './assets/knowabout.png';
 import payback from './assets/payback.png';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useNavigate, useLocation } from 'react-router-dom';
+import soon from './assets/soon.png';
 
 const TABS = [
   { key: 'web', label: 'Web Development' },
@@ -120,15 +123,21 @@ const PROJECTS = {
     desc: 'A playful NPM package for web devs: if your client doesn’t pay on time, add Payback-to-ya to their site and watch it slowly disappear over 7 days. ShIk sHaK ShOk!',
     link: 'https://www.npmjs.com/package/payback-to-ya', 
   },
+  soon: {
+    image: soon,
+    name: 'Coming Soon',
+    desc: '',
+    link: '', 
+  },
 };
 
 const DUMMY_PROJECTS: Record<TabKey, Project[]> = {
-  web: [PROJECTS.bento, PROJECTS.foresty, PROJECTS.finance, PROJECTS.aaargh, PROJECTS.mana, PROJECTS.surgeon,],
+  web: [PROJECTS.bento, PROJECTS.aaargh, PROJECTS.mana, PROJECTS.foresty, PROJECTS.surgeon, PROJECTS.finance,],
   android: [PROJECTS.cognify, PROJECTS.holostry],
   python: [PROJECTS.concrete, PROJECTS.sentiment, PROJECTS.colorizer],
   npm: [PROJECTS.revo, PROJECTS.knowabout, PROJECTS.payback],
   // cloud: [PROJECTS.concrete, PROJECTS.bento, PROJECTS.concrete, PROJECTS.bento],
-  uiux: [PROJECTS.bento, PROJECTS.concrete, PROJECTS.bento, PROJECTS.concrete, PROJECTS.bento, PROJECTS.concrete],
+  uiux: [PROJECTS.soon, PROJECTS.soon, PROJECTS.soon, PROJECTS.soon, PROJECTS.soon, PROJECTS.soon],
 };
 
 const tabOrder: TabKey[] = TABS.map(t => t.key);
@@ -227,15 +236,15 @@ const AllProjects = () => {
         >
           {activeTab !== 'uiux' ? (
             <div className="w-full md:w-[80vw] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center md:p-2 mb-8 md:mb-16">
-              {DUMMY_PROJECTS[activeTab].slice(0, 4).map((proj, idx) => (
+              {DUMMY_PROJECTS[activeTab].map((proj, idx) => (
                 <div
                   key={idx}
                   className="w-full relative flex items-center justify-center group overflow-hidden border-4 border-black"
                 >
-                  <div className="absolute top-0 md:top-2 left-2 md:left-4 z-20 gaegu-bold uppercase text-base md:text-2xl font-bold text-white">
+                  <div className="absolute top-2 left-2 md:left-4 z-20 gaegu-bold uppercase text-base md:text-2xl font-bold text-white">
                     {proj.name}
                   </div>
-                  <img
+                  <CachedImage
                     src={proj.image}
                     alt={proj.name}
                     className="w-full h-auto object-contain bg-white cursor-pointer transition-transform duration-300 group-hover:scale-105"
@@ -243,14 +252,14 @@ const AllProjects = () => {
                   />
                   <div className="absolute inset-0 pointer-events-none bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10" />
                   <div className="absolute top-10 md:top-16 left-2 md:left-4 flex flex-col items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 w-[80%]">
-                    <p className="text-base md:text-lg text-white mb-4 md:mb-8 w-full gaegu-regular">
+                    <p className="text-base md:text-2xl text-white mb-4 md:mb-8 w-full gaegu-regular">
                       {proj.desc}
                     </p>
                     <a
                       href={proj.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block px-2 md:px-4 md:py-1 bg-white text-black gaegu-regular border-2 md:border-4 border-black hover:bg-black hover:text-white transition-colors duration-200"
+                      className="inline-block text-sm md:text-base px-2 py-1 md:px-4 md:py-2 bg-white text-black font-mono border-2 border-black hover:bg-black hover:text-white transition-colors duration-200"
                     >
                       View Project
                     </a>
@@ -280,11 +289,10 @@ const AllProjects = () => {
                         padding: '4px',
                       }}
                     >
-                      <img
+                      <CachedImage
                         src={proj.image}
                         alt={proj.name}
                         className="w-full h-auto object-contain bg-white cursor-pointer"
-                        onClick={() => window.open(proj.link, '_blank')}
                         style={{
                           clipPath: clip,
                         }}
@@ -314,7 +322,7 @@ const AllProjects = () => {
                         padding: '4px',
                       }}
                     >
-                      <img
+                      <CachedImage
                         src={proj.image}
                         alt={proj.name}
                         className="w-full h-auto object-contain bg-white cursor-pointer"

@@ -7,7 +7,7 @@ import cognify from './assets/cognify.png';
 import bento from './assets/bento.png';
 import aaargh from './assets/img4.mp4';
 import arrow from './assets/arrow.png';
-import link from './assets/link.svg';
+import link from './assets/link.png';
 import LinkedinLogo from './assets/LinkedinLogo.svg';
 import XLogo from './assets/XLogo.svg';
 import GithubLogo from './assets/GithubLogo.svg';
@@ -27,6 +27,7 @@ import { getDatabase, ref, runTransaction, get } from 'firebase/database';
 import app from './firebase';
 import LoadingScreen from './LoadingScreen';
 import { FiEye, FiHeart } from 'react-icons/fi';
+import CachedImage from './components/CachedImage';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -230,7 +231,25 @@ function App() {
         localStorage.setItem('comic-loading-last', Date.now().toString());
       }} />}
       <div className={`w-full min-h-screen flex flex-col items-center bg-white relative transition-opacity duration-500 ${loading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <div className="absolute top-2 right-4 text-black gaegu-regular text-lg md:text-xl z-[100]">
+        <motion.div
+          className="absolute top-2 left-4 text-black gaegu-regular text-lg md:text-xl z-[100]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+        >
+          <Link
+            to="/simple"
+            className="cursor-pointer gaegu-regular"
+          >
+            &lt; View Simpler Version &gt;
+          </Link>
+        </motion.div>
+        <motion.div
+          className="absolute top-2 right-4 text-black gaegu-regular text-lg md:text-xl z-[100]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+        >
           <span className="flex items-center gap-2">
             <button
               className="focus:outline-none flex items-center cursor-pointer"
@@ -247,7 +266,7 @@ function App() {
             <FiEye className="inline-block text-2xl" aria-label="Total Reads" />
             <span className=''>{views === null ? '.' : views}</span>
           </span>
-        </div>
+        </motion.div>
         {/* page 1 */}
         <section className="relative w-full h-dvh flex justify-center items-center" aria-label="Introduction">
           <motion.img
@@ -322,8 +341,6 @@ function App() {
 
           <div className='absolute rotate-[20deg] md:-rotate-[20deg] top-12 left-[28%] text-6xl gaegu-regular text-[#FFD403]'><span className='text-4xl md:text-6xl'>W</span><span className='text-5xl md:text-7xl'>O</span><span className='text-6xl md:text-8xl'>O</span><span className='text-6xl md:text-8xl'>!</span></div>
         </section>
-
-        {/* <section className='relative w-full h-dvh mt-16'><div className='bg-red-500 w-full h-full'></div></section> */}
 
         {/* page 3 */}
         <section className="w-full h-fit flex flex-col md:flex-row items-center justify-center bg-white my-16" aria-label="Technical Skills">
@@ -467,11 +484,11 @@ function App() {
                     className="absolute top-0 right-0 z-30"
                     aria-label="View Concrete Damage Detector project on GitHub"
                   >
-                    <img
+                    <CachedImage
                       src={link}
                       alt="Link to Concrete Damage Detector project"
                       className="w-10 h-10"
-                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      
                       loading="lazy"
                     />
                   </a>
@@ -480,7 +497,7 @@ function App() {
                     <p className="text-sm font-mono normal-case text-justify">Built a YOLO-powered damage detector to spot and segment cracks in concrete — keeping buildings strong, one frame at a time.</p>
                   </SpeechBoxSolid>
                   <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
-                    <img
+                    <CachedImage
                       src={concrete}
                       alt="Concrete Damage Detector - AI-powered crack detection system for infrastructure monitoring"
                       className="w-full h-auto transition-transform duration-300"
@@ -510,11 +527,11 @@ function App() {
                     className="absolute top-0 right-0 z-30"
                     aria-label="View Bento Grid Generator project"
                   >
-                    <img
+                    <CachedImage
                       src={link}
                       alt="Link to Bento Grid Generator project"
                       className="w-10 h-10"
-                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      
                       loading="lazy"
                     />
                   </a>
@@ -523,7 +540,7 @@ function App() {
                     <p className="text-sm font-mono normal-case text-justify">Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.</p>
                   </SpeechBoxSolid>
                   <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
-                    <img
+                    <CachedImage
                       src={bento}
                       alt="Bento Grid Generator - UI layout tool for creating bento-style designs with live previews"
                       className="w-full h-auto transition-transform duration-300"
@@ -568,11 +585,11 @@ function App() {
                     className="absolute top-0 right-0 z-30"
                     aria-label="View Cognify project on GitHub"
                   >
-                    <img
+                    <CachedImage
                       src={link}
                       alt="Link to Cognify project"
                       className="w-10 h-10"
-                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      
                       loading="lazy"
                     />
                   </a>
@@ -581,7 +598,7 @@ function App() {
                     <p className="text-sm font-mono normal-case text-justify">Developed an Android learning platform with Kotlin and OpenAI to simplify how users learn and understand new concepts.</p>
                   </SpeechBoxSolid>
                   <div className="max-w-[40vw] h-auto border-2 md:border-4 border-black overflow-hidden">
-                    <img
+                    <CachedImage
                       src={cognify}
                       alt="Cognify - Android learning platform with AI-powered concept explanation"
                       className="w-full h-auto transition-transform duration-300"
@@ -611,11 +628,11 @@ function App() {
                     className="absolute top-0 right-0 z-30"
                     aria-label="View AAARGH!! game project"
                   >
-                    <img
+                    <CachedImage
                       src={link}
                       alt="Link to AAARGH!! game project"
                       className="w-10 h-10"
-                      style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                      
                       loading="lazy"
                     />
                   </a>
@@ -666,16 +683,16 @@ function App() {
                   className="absolute top-0 right-0 z-30"
                   aria-label="View Concrete Damage Detector project on GitHub"
                 >
-                  <img
+                  <CachedImage
                     src={link}
                     alt="Link to Concrete Damage Detector project"
                     className="w-10 h-10"
-                    style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                    
                     loading="lazy"
                   />
                 </a>
                 <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
-                  <img
+                  <CachedImage
                     src={concrete}
                     alt="Concrete Damage Detector - AI-powered crack detection system for infrastructure monitoring"
                     className="w-full h-auto transition-transform duration-300"
@@ -709,16 +726,16 @@ function App() {
                   className="absolute top-0 right-0 z-30"
                   aria-label="View Bento Grid Generator project"
                 >
-                  <img
+                  <CachedImage
                     src={link}
                     alt="Link to Bento Grid Generator project"
                     className="w-10 h-10"
-                    style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                    
                     loading="lazy"
                   />
                 </a>
                 <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
-                  <img
+                  <CachedImage
                     src={bento}
                     alt="Bento Grid Generator - UI layout tool for creating bento-style designs with live previews"
                     className="w-full h-auto transition-transform duration-300"
@@ -752,16 +769,16 @@ function App() {
                   className="absolute top-0 right-0 z-30"
                   aria-label="View Cognify project on GitHub"
                 >
-                  <img
+                  <CachedImage
                     src={link}
                     alt="Link to Cognify project"
                     className="w-10 h-10"
-                    style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                    
                     loading="lazy"
                   />
                 </a>
                 <div className="w-full h-auto border-2 md:border-4 border-black overflow-hidden">
-                  <img
+                  <CachedImage
                     src={cognify}
                     alt="Cognify - Android learning platform with AI-powered concept explanation"
                     className="w-full h-auto transition-transform duration-300"
@@ -795,11 +812,11 @@ function App() {
                   className="absolute top-0 right-0 z-30"
                   aria-label="View AAARGH!! game project"
                 >
-                  <img
+                  <CachedImage
                     src={link}
                     alt="Link to AAARGH!! game project"
                     className="w-10 h-10"
-                    style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                    
                     loading="lazy"
                   />
                 </a>
@@ -885,13 +902,13 @@ function App() {
           </div>
           <div className="flex flex-row justify-center items-center gap-6 mb-8 md:mb-16 mt-4 md:mt-8">
             <a href="https://linkedin.com/in/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <img src={LinkedinLogo} alt="LinkedIn" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
+              <CachedImage src={LinkedinLogo} alt="LinkedIn" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
             </a>
             <a href="https://github.com/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <img src={GithubLogo} alt="GitHub" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
+              <CachedImage src={GithubLogo} alt="GitHub" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
             </a>
             <a href="https://twitter.com/maybetarun" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-              <img src={XLogo} alt="X (Twitter)" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
+              <CachedImage src={XLogo} alt="X (Twitter)" className="w-8 md:w-12 h-8 md:h-12 hover:scale-105 transition-opacity duration-200" loading="lazy" />
             </a>
           </div>
           <PageNumberControl />

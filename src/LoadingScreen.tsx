@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import sperm from './assets/sperm.gif';
+import CachedImage from './components/CachedImage';
 
 export default function LoadingScreen({ onFinish }: { onFinish: () => void }) {
   const [visible, setVisible] = useState(true);
@@ -55,15 +56,15 @@ export default function LoadingScreen({ onFinish }: { onFinish: () => void }) {
               />
             </motion.div>
           )}
-          <motion.img
-            src={sperm}
-            alt="Loading animation"
-            className="w-32 h-32 object-contain"
-            style={{ pointerEvents: 'none', zIndex: 5 }}
-            loading="eager"
-            animate={animateProps}
-            transition={transitionProps}
-          />
+          <motion.div animate={animateProps} transition={transitionProps}>
+            <CachedImage
+              src={sperm}
+              alt="Loading animation"
+              className="w-32 h-32 object-contain"
+              style={{ pointerEvents: 'none', zIndex: 5 }}
+              loading="eager"
+            />
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
