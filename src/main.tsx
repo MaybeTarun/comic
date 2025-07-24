@@ -5,11 +5,13 @@ import './index.css'
 import App from './App.tsx'
 import AllProjects from './allprojects';
 import Simple from './simple';
+import NotFound from './notfound.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
     <Routes>
+    <Route path="*" element={<NotFound />} />
       <Route path="/" element={<App />}/>
       <Route path="/projects" element={<AllProjects />}/>
       <Route path="/simple" element={<Simple />} />

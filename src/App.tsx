@@ -22,6 +22,7 @@ import sky from './assets/sky.webp';
 import looking from './assets/looking.webp';
 import boredme from './assets/boredme.webp';
 import bug from './assets/bug.webp';
+import hand from './assets/hand.png';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { getDatabase, ref, runTransaction, get } from 'firebase/database';
 import app from './firebase';
@@ -230,7 +231,7 @@ function App() {
         setLoading(false);
         localStorage.setItem('comic-loading-last', Date.now().toString());
       }} />}
-      <div className={`w-full min-h-screen flex flex-col items-center bg-white relative transition-opacity duration-500 ${loading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <div className={`overflow-x-hidden w-full min-h-screen flex flex-col items-center bg-white relative transition-opacity duration-500 ${loading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <motion.div
           className="absolute top-2 left-4 text-black gaegu-regular text-lg md:text-xl z-[100]"
           initial={{ opacity: 0 }}
@@ -446,7 +447,12 @@ function App() {
               With his powers now honed, Tarun<br/>sets off on <span className='gaegu-bold'>quests</span> that tests both<br/>his logic and caffeine limits.
             </SpeechBoxL>
           </div>
-          <div className="w-1/2"></div>
+          <motion.div className="w-1/2 relative" initial={{ x: '100%' }} whileInView={{ x: 0 }} transition={{ duration: 1, delay: 0.5 }} viewport={{ once: true }}>          
+            <CachedImage className='translate-y-64 -translate-x-20 md:translate-x-0 right-0 w-auto md:scale-100 scale-[450%]' src={hand}></CachedImage>
+            <a href="https://freelance.maybetarun.in" target="_blank" rel="noopener noreferrer">
+              <button  className='absolute -left-56 md:left-12 py-1 px-2 md:py-2 md:px-4 border-2 border-black bg-black hover:bg-white text-white hover:text-black -bottom-48 md:bottom-32 text-base md:text-xl gaegu-regular -rotate-2 hover:rotate-6 hover:scale-105 transition-transform duration-100'># He also freelances btw</button>
+            </a>
+          </motion.div>
         </section>
 
         {/* page 5 for >md */}
@@ -655,7 +661,7 @@ function App() {
         </section>
 
         {/* page 5 for < md */}
-        <section className="w-full flex flex-col items-center justify-center bg-white my-16 md:hidden" aria-label="Portfolio Projects Mobile">
+        <section className="w-full flex flex-col items-center justify-center bg-white my-32 md:hidden" aria-label="Portfolio Projects Mobile">
           <div className="w-full flex flex-col items-center gap-8">
             <div className="w-full flex justify-center">
               <h2 className="text-2xl font-bold gaegu-bold text-black border-2 md:border-4 border-black bg-white px-6 py-2 w-fit">
