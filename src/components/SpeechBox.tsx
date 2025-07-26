@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import vect from '../assets/vect.png';
+import vect from '../assets/vect.webp';
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
 
 interface SpeechBoxProps {

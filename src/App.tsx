@@ -1,16 +1,16 @@
 import flyingTarun from './assets/superman.gif';
 import { SpeechBox, SpeechBoxR, SpeechBoxL, SpeechBoxLL, SpeechBoxSolid } from './components/SpeechBox';
 import { AvatarCircles } from "./components/AvatarCircles";
-import skillbg from './assets/skillbg.avif';
-import concrete from './assets/concrete.png';
+import skillbg from './assets/skillbg.webp';
+import concrete from './assets/concrete.webp';
 import cognify from './assets/cognify.png';
-import bento from './assets/bento.png';
+import bento from './assets/bento.webp';
 import aaargh from './assets/img4.mp4';
-import arrow from './assets/arrow.png';
-import link from './assets/link.png';
-import LinkedinLogo from './assets/LinkedinLogo.svg';
-import XLogo from './assets/XLogo.svg';
-import GithubLogo from './assets/GithubLogo.svg';
+import arrow from './assets/arrow.webp';
+import link from './assets/link.webp';
+import LinkedinLogo from './assets/LinkedinLogo.webp';
+import XLogo from './assets/XLogo.webp';
+import GithubLogo from './assets/GithubLogo.webp';
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -22,7 +22,7 @@ import sky from './assets/sky.webp';
 import looking from './assets/looking.webp';
 import boredme from './assets/boredme.webp';
 import bug from './assets/bug.webp';
-import hand from './assets/hand.png';
+import hand from './assets/hand.webp';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { getDatabase, ref, runTransaction, get } from 'firebase/database';
 import app from './firebase';
@@ -339,6 +339,7 @@ function App() {
             }}
           />
           <div className='absolute bottom-4 left-8 gaegu-regular text-white text-base md:text-2xl'>[ Part time bug killer ]</div>
+          <div className='absolute top-4 right-8 gaegu-regular text-white text-base md:text-2xl'>Highscore: <span className='underline'>0</span></div>
 
           <div className='absolute rotate-[20deg] md:-rotate-[20deg] top-12 left-[28%] text-6xl gaegu-regular text-[#FFD403]'><span className='text-4xl md:text-6xl'>W</span><span className='text-5xl md:text-7xl'>O</span><span className='text-6xl md:text-8xl'>O</span><span className='text-6xl md:text-8xl'>!</span></div>
         </section>
@@ -379,7 +380,7 @@ function App() {
                 >
                   <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
                     <span className="flex-1">web development</span>
-                    <AvatarCircles avatarUrls={webDevAvatars} numPeople={99} />
+                    <AvatarCircles avatarUrls={webDevAvatars} numPeople={20} />
                   </div>
                 </motion.div>
                 <motion.div
@@ -389,7 +390,7 @@ function App() {
                 >
                   <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
                     <span className="flex-1">android development</span>
-                    <AvatarCircles avatarUrls={androidDevAvatars} numPeople={99} />
+                    <AvatarCircles avatarUrls={androidDevAvatars} numPeople={0} />
                   </div>
                 </motion.div>
                 <motion.div
@@ -399,7 +400,7 @@ function App() {
                 >
                   <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
                     <span className="flex-1">cloud computing</span>
-                    <AvatarCircles avatarUrls={cloudAvatars} numPeople={99} />
+                    <AvatarCircles avatarUrls={cloudAvatars} numPeople={0} />
                   </div>
                 </motion.div>
                 <motion.div
@@ -409,7 +410,7 @@ function App() {
                 >
                   <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
                     <span className="flex-1">programming languages</span>
-                    <AvatarCircles avatarUrls={programmingAvatars} numPeople={99} />
+                    <AvatarCircles avatarUrls={programmingAvatars} numPeople={0} />
                   </div>
                 </motion.div>
                 <motion.div
@@ -419,7 +420,7 @@ function App() {
                 >
                   <div className="flex items-center gap-4 border-2 border-black px-4 md:px-8 py-2 md:py-4 bg-white text-black text-left text-[0.8rem] md:text-xl font-mono capitalize rounded-xl">
                     <span className="flex-1">UI/UX designing</span>
-                    <AvatarCircles avatarUrls={uiuxAvatars} numPeople={99} />
+                    <AvatarCircles avatarUrls={uiuxAvatars} numPeople={0} />
                   </div>
                 </motion.div>
               </div>
@@ -867,7 +868,7 @@ function App() {
             />
           </div>
           <SpeechBoxR className="absolute right-[10%] md:right-[20%] -bottom-[28rem]">
-            Now, he's bored and on the<br/>lookout for the next challenge.
+            Now, he's bored and on the<br/>lookout for the <span className='gaegu-bold'>next challenge</span>.
           </SpeechBoxR>
           <motion.img
             style={{ y: imgParallaxY }}
@@ -949,7 +950,7 @@ function PageNumberControl() {
         <TiArrowSortedUp style={{ transform: 'rotate(-90deg)' }} />
       </button>
       <div className="px-6 py-2 border-2 border-black bg-white text-lg gaegu-bold">
-        Page {page} of {totalPages}
+        Page {page} of 6
       </div>
       <button
         onClick={handleNext}
