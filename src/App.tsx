@@ -22,6 +22,7 @@ import sky from './assets/sky.webp';
 import looking from './assets/looking.webp';
 import boredme from './assets/boredme.webp';
 import bug from './assets/bug.webp';
+// import ShooterGame from './components/shooter.tsx'
 import hand from './assets/hand.webp';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { getDatabase, ref, runTransaction, get } from 'firebase/database';
@@ -73,7 +74,10 @@ const uiuxAvatars = [
 ];
 
 function App() {
+  const navigate = useNavigate();
   const [showSpeech, setShowSpeech] = useState(false);
+  // const [isShooterOpen, setIsShooterOpen] = useState(false);
+
   const { scrollY } = useViewportScroll();
   const imgParallaxY = useTransform(scrollY, value => -value * 0.09);
 
@@ -238,12 +242,12 @@ function App() {
           animate={{ opacity: 1 }}
           transition={{ delay: 2 }}
         >
-          <Link
-            to="/simple"
-            className="cursor-pointer gaegu-regular"
+          <button
+            onClick={() => navigate('/simple')}
+            className="cursor-pointer gaegu-regular border-y-2 border-black"
           >
             &lt; View Simpler Version &gt;
-          </Link>
+          </button>
         </motion.div>
         <motion.div
           className="absolute top-2 right-4 text-black gaegu-regular text-lg md:text-xl z-[100]"
@@ -268,6 +272,7 @@ function App() {
             <span className=''>{views === null ? '.' : views}</span>
           </span>
         </motion.div>
+
         {/* page 1 */}
         <section className="relative w-full h-dvh flex justify-center items-center" aria-label="Introduction">
           <motion.img
@@ -335,9 +340,13 @@ function App() {
             whileInView={{ x: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
             onClick={() => {
-              alert('soon will be a shooter game');
+              // setIsShooterOpen(true);
             }}
           />
+          {/* <ShooterGame 
+            isOpen={isShooterOpen} 
+            onClose={() => setIsShooterOpen(false)} 
+          /> */}
           <div className='absolute bottom-4 left-8 gaegu-regular text-white text-base md:text-2xl'>[ Part time bug killer ]</div>
           <div className='absolute top-4 right-8 gaegu-regular text-white text-base md:text-2xl'>Highscore: <span className='underline'>0</span></div>
 
@@ -651,7 +660,6 @@ function App() {
                     src={aaargh}
                     className="max-w-[40vw] h-auto border-2 md:border-4 border-black"
                     controls
-                    muted
                     playsInline
                     title="AAARGH!! - Voice-controlled flying game demonstration"
                   />
@@ -832,7 +840,6 @@ function App() {
                     src={aaargh}
                     className="w-full h-auto border-2 md:border-4 border-black"
                     controls
-                    muted
                     playsInline
                     title="AAARGH!! - Voice-controlled flying game demonstration"
                   />
