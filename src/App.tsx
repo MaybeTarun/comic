@@ -22,7 +22,7 @@ import sky from './assets/sky.webp';
 import looking from './assets/looking.webp';
 import boredme from './assets/boredme.webp';
 import bug from './assets/bug.webp';
-// import ShooterGame from './components/shooter.tsx'
+import ShooterGame from './components/shooter.tsx'
 import hand from './assets/hand.webp';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { getDatabase, ref, runTransaction, get } from 'firebase/database';
@@ -30,6 +30,7 @@ import app from './firebase';
 import LoadingScreen from './LoadingScreen';
 import { FiEye, FiHeart } from 'react-icons/fi';
 import CachedImage from './components/CachedImage';
+import bubble from './assets/bubble.webp';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -76,7 +77,7 @@ const uiuxAvatars = [
 function App() {
   const navigate = useNavigate();
   const [showSpeech, setShowSpeech] = useState(false);
-  // const [isShooterOpen, setIsShooterOpen] = useState(false);
+  const [isShooterOpen, setIsShooterOpen] = useState(false);
 
   const { scrollY } = useViewportScroll();
   const imgParallaxY = useTransform(scrollY, value => -value * 0.09);
@@ -94,6 +95,15 @@ function App() {
   const now = Date.now();
   const shouldShowLoading = !(lastLoaded && now - parseInt(lastLoaded, 10) < weekMs);
   const [loading, setLoading] = useState(shouldShowLoading);
+
+  const [shooterHighScore, setShooterHighScore] = useState(
+    Number.parseInt(localStorage.getItem("shooterHighScore") || "0")
+  );
+
+  const updateShooterHighScore = (newScore: number) => {
+    setShooterHighScore(newScore);
+    localStorage.setItem("shooterHighScore", newScore.toString());
+  };
 
   useEffect(() => {
     const lastLoaded = localStorage.getItem('comic-loading-last');
@@ -244,7 +254,7 @@ function App() {
         >
           <button
             onClick={() => navigate('/simple')}
-            className="cursor-pointer gaegu-regular border-y-2 border-black"
+            className="cursor-pointer gaegu-regular border-y-2 border-black text-sm md:text-base"
           >
             &lt; View Simpler Version &gt;
           </button>
@@ -285,7 +295,7 @@ function App() {
             transition={{ duration: 2, ease: 'easeInOut' }}
           />
           {showSpeech && (
-            <SpeechBoxR className="absolute max-w-[90vw] md:left-[15%] bottom-[25%] md:bottom-8 text-base z-20">
+            <SpeechBoxR className="absolute max-w-[85vw] md:left-[15%] bottom-[25%] md:bottom-8 text-base z-20">
               Since birth, Tarun showed signs of becoming<br className='hidden md:block'/> something more than human... <span className="gaegu-bold text-lg md:text-4xl">a Developer.</span>
             </SpeechBoxR>
           )}
@@ -340,15 +350,36 @@ function App() {
             whileInView={{ x: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
             onClick={() => {
-              // setIsShooterOpen(true);
+              setIsShooterOpen(true);
             }}
           />
-          {/* <ShooterGame 
+          <ShooterGame 
             isOpen={isShooterOpen} 
-            onClose={() => setIsShooterOpen(false)} 
-          /> */}
-          <div className='absolute bottom-4 left-8 gaegu-regular text-white text-base md:text-2xl'>[ Part time bug killer ]</div>
-          <div className='absolute top-4 right-8 gaegu-regular text-white text-base md:text-2xl'>Highscore: <span className='underline'>0</span></div>
+            onClose={() => setIsShooterOpen(false)}
+            highScore={shooterHighScore}
+            onHighScoreUpdate={updateShooterHighScore}
+          />
+          <div className='absolute bottom-4 left-8 gaegu-regular text-white text-base md:text-2xl'> &#91; Part time bug fixer &#93;	</div>
+          {/* <div className='absolute top-4 right-8 gaegu-regular text-white text-base md:text-2xl'>Highscore: <span className='underline-offset-8 underline'>{shooterHighScore}</span></div> */}
+          <div className="absolute top-4 right-8 gaegu-regular text-white text-base md:text-2xl group">
+            <div className="relative inline-block">
+              Highscore: <span className="underline underline-offset-8">{shooterHighScore}</span>
+              <div className="absolute -left-2/3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                <div className="relative w-[10rem] sm:w-[12rem]">
+                  <img src={bubble} alt="tooltip bubble" className="w-full h-auto" />
+                  <span className="absolute inset-0 flex items-center justify-center text-center mt-3 text-black text-xs md:text-sm px-2 gaegu-bold whitespace-nowrap">
+                    {shooterHighScore < 20
+                      ? "Intern Debugger"
+                      : shooterHighScore < 100
+                      ? "Junior Bug Squasher"
+                      : shooterHighScore < 200
+                      ? "Senior Code Exterminator"
+                      : "Legendary Bug Slayer"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className='absolute rotate-[20deg] md:-rotate-[20deg] top-12 left-[28%] text-6xl gaegu-regular text-[#FFD403]'><span className='text-4xl md:text-6xl'>W</span><span className='text-5xl md:text-7xl'>O</span><span className='text-6xl md:text-8xl'>O</span><span className='text-6xl md:text-8xl'>!</span></div>
         </section>
@@ -370,7 +401,7 @@ function App() {
                 transition={{ duration: 0.5 }}
               />
             </div>
-            <div className="flex-1 flex items-center justify-end mt-24 md:mt-0">
+            <div className="flex-1 flex items-center justify-end mt-24 md:mt-0 -mr-6 md:mr-0">
               <div
                 className="w-full border-y-2 border-l-2 md:border-l-4 md:border-y-4 border-r-0 border-black p-6 ml-4 md:ml-20 flex flex-col gap-4 md:gap-6 bg-white relative"
                 style={{
