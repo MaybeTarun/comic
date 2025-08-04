@@ -90,7 +90,7 @@ const Simple = () => (
             </Tooltip>
           </a>
           <br />
-          Proficient in React.js and AWS
+          <span className="text-xs sm:text-lg">&lt; Proficient in React.js and AWS &gt;</span>
         </p>
       </div>
 

@@ -12,11 +12,11 @@ export default function LoadingScreen({ onFinish }: { onFinish: () => void }) {
     setOffset(window.innerWidth * 0.4);
     const timers: NodeJS.Timeout[] = [];
     timers.push(setTimeout(() => setPhase('left'), 1000)); 
-    timers.push(setTimeout(() => setPhase('right'), 3000)); // go directly from left to right
+    timers.push(setTimeout(() => setPhase('right'), 3000));
     timers.push(setTimeout(() => {
       setVisible(false);
       setTimeout(onFinish, 500);
-    }, 4000)); // adjust total duration
+    }, 4000)); 
     return () => timers.forEach(clearTimeout);
   }, [onFinish]);
 
@@ -50,10 +50,7 @@ export default function LoadingScreen({ onFinish }: { onFinish: () => void }) {
               transition={{ duration: 2, ease: 'easeOut' }}
               className="fixed right-0 pointer-events-none h-[80vh] w-[80vh] -translate-y-1/2 z-10 overflow-hidden"
             >
-              <div
-                className="absolute right-0 top-0 h-full w-full bg-[#ffe5e8] rounded-full"
-                style={{ right: '-40vh' }}
-              />
+              <div className="absolute top-0 h-full w-full bg-[#ffe5e8] rounded-full -right-[65vh] md:-right-[40vh]"/>
             </motion.div>
           )}
           <motion.div animate={animateProps} transition={transitionProps}>

@@ -31,6 +31,7 @@ import LoadingScreen from './LoadingScreen';
 import { FiEye, FiHeart } from 'react-icons/fi';
 import CachedImage from './components/CachedImage';
 import bubble from './assets/bubble.webp';
+import pow from './assets/pow.webp';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -254,7 +255,7 @@ function App() {
         >
           <button
             onClick={() => navigate('/simple')}
-            className="cursor-pointer gaegu-regular border-y-2 border-black text-sm md:text-base"
+            className="cursor-pointer gaegu-regular border-y-2 border-black text-base md:text-lg"
           >
             &lt; View Simpler Version &gt;
           </button>
@@ -287,7 +288,7 @@ function App() {
         <section className="relative w-full h-dvh flex justify-center items-center" aria-label="Introduction">
           <motion.img
             src={kid}
-            alt="Tarun Gupta - Full Stack Developer Portfolio Introduction"
+            alt="Tarun Gupta as kid"
             className="border-2 md:border-4 border-black w-[90vw] md:w-[60vw] h-auto z-10"
             loading="lazy"
             initial={{ scale: 3 }}
@@ -306,7 +307,7 @@ function App() {
           <div className="border-y-4 border-black w-full h-full object-cover overflow-hidden">
             <motion.img
               src={awakening}
-              alt="Tarun Gupta's development journey and training in coding"
+              alt="Tarun Gupta's development journey"
               className="w-full h-full object-cover"
               loading="lazy"
               initial={{ scale: 1.2 }}
@@ -324,7 +325,7 @@ function App() {
           <div className="border-y-4 border-black w-full h-full object-cover relative overflow-hidden">
             <motion.img
               src={sky}
-              alt="Tarun Gupta showcasing developer skills and expertise"
+              alt="Bug Killer background image"
               className="w-full h-full object-cover"
               loading="lazy"
               initial={{ scale: 1.2 }}
@@ -334,10 +335,10 @@ function App() {
           </div>
           <motion.img
             src={flyingTarun}
-            alt="Tarun Gupta flying character illustration"
+            alt="Flying character illustration"
             className="absolute h-12 md:h-36 w-auto rotate-[20deg] md:-rotate-12 -top-4 -left-4 md:left-4 scale-125"
             loading="lazy"
-            initial={{ x: -40, rotate: rotation.initial + 'deg' }}
+            initial={{ x: -60, rotate: rotation.initial + 'deg' }}
             whileInView={{ x: 0, rotate: rotation.whileInView + 'deg' }}
             transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
           />
@@ -346,7 +347,31 @@ function App() {
             alt="Bug illustration"
             className="absolute h-16 md:h-28 cursor-pointer w-auto bottom-4 md:bottom-8 right-8 md:right-20"
             loading="lazy"
-            initial={{ x: 40 }}
+            initial={{ x: 60 }}
+            whileInView={{ x: 0 }}
+            transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
+            onClick={() => {
+              setIsShooterOpen(true);
+            }}
+          />
+          <motion.img
+            src={pow}
+            alt="PoW pOw Pow"
+            className="absolute h-6 md:h-10 cursor-pointer w-auto bottom-[4.5rem] md:bottom-32 right-2 md:right-8"
+            loading="lazy"
+            initial={{ x: 60 }}
+            whileInView={{ x: 0 }}
+            transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
+            onClick={() => {
+              setIsShooterOpen(true);
+            }}
+          />
+          <motion.img
+            src={pow}
+            alt="PoW pOw Pow"
+            className="absolute h-4 md:h-8 cursor-pointer w-auto bottom-2 md:bottom-4 right-20 md:right-40"
+            loading="lazy"
+            initial={{ x: 60 }}
             whileInView={{ x: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
             onClick={() => {
@@ -365,8 +390,8 @@ function App() {
             <div className="relative inline-block">
               Highscore: <span className="underline underline-offset-8">{shooterHighScore}</span>
               <div className="absolute -left-2/3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                <div className="relative w-[10rem] sm:w-[12rem]">
-                  <img src={bubble} alt="tooltip bubble" className="w-full h-auto" />
+                <div className="relative w-[10rem] sm:w-[12rem] rotate-3 md:-mt-2">
+                  <img src={bubble} alt="tooltip bubble background" className="w-full h-auto" />
                   <span className="absolute inset-0 flex items-center justify-center text-center mt-3 text-black text-xs md:text-sm px-2 gaegu-bold whitespace-nowrap">
                     {shooterHighScore < 20
                       ? "Intern Debugger"
@@ -470,10 +495,10 @@ function App() {
         {/* page 4 */}
         <section className="w-full h-fit flex items-center justify-start bg-white my-16" aria-label="Project Journey">
           <div className="md:w-2/3 flex items-center justify-center relative">
-            <div className="relative w-full h-auto border-2 md:border-4 border-l-0 border-black overflow-hidden">
+            <div className="relative w-full h-auto border-y-2 md:border-y-4 border-r-2 md:border-r-4 border-black overflow-hidden">
               <motion.img
                 src={quests}
-                alt="Tarun Gupta embarking on development projects and challenges"
+                alt="Tarun Gupta's various quests showcase"
                 className="w-full h-auto"
                 loading="lazy"
                 initial={{ scale: 1.2 }}
@@ -677,7 +702,7 @@ function App() {
                   >
                     <CachedImage
                       src={link}
-                      alt="Link to AAARGH!! game project"
+                      alt="Link to AAARGH!!"
                       className="w-10 h-10"
                       
                       loading="lazy"
@@ -860,7 +885,7 @@ function App() {
                 >
                   <CachedImage
                     src={link}
-                    alt="Link to AAARGH!! game project"
+                    alt="Link to AAARGH!!"
                     className="w-10 h-10"
                     
                     loading="lazy"
@@ -897,7 +922,7 @@ function App() {
           <div className="w-full h-full object-cover border-y-4 border-black overflow-hidden">
             <motion.img
               src={looking}
-              alt="Tarun Gupta's development journey and achievements"
+              alt="Tarun Gupta looking for new quests"
               className="w-full h-full object-cover"
               loading="lazy"
               initial={{ scale: 1.2 }}
@@ -911,7 +936,7 @@ function App() {
           <motion.img
             style={{ y: imgParallaxY }}
             src={boredme}
-            alt="Tarun Gupta looking for new challenges"
+            alt="Tarun Gupta bored"
             className="absolute top-[20rem] md:top-72 left-16 w-36 md:w-48 h-36 md:h-48 border-2 md:border-4 border-black object-cover"
             loading="lazy"
           />

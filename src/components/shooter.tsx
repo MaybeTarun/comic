@@ -6,6 +6,7 @@ import { FiX, FiVolume2, FiVolumeX } from "react-icons/fi";
 import shooter from "../assets/shooter.webp";
 import life from "../assets/heart.webp";
 import bugImage from "../assets/bug.webp";
+import LetterGlitch from '../components/Backgrounds/LetterGlitch/LetterGlitch';
 
 interface Position { x: number; y: number }
 interface GameObject extends Position { id: number }
@@ -108,7 +109,7 @@ const ShooterGame: React.FC<ShooterGameProps> = ({ isOpen, onClose, highScore, o
     playerVelocityRef.current = { x: 0, y: 0 };
     gameStateRef.current = { player: { x: gameWidth / 2 - 20, y: gameHeight - 80 }, bullets: [], bugs: [], particles: [], score: 0, lives: 3, wave: 1, gameRunning: true, lastBulletTime: 0 };
     setShowLeaderboard(false);
-    setTimeout(() => setShowLaggyText(true), 2000);
+    setTimeout(() => setShowLaggyText(true), 3000);
   }, [gameWidth, gameHeight]);
 
   const createBug = useCallback((wave: number): Bug => {
@@ -242,35 +243,47 @@ const ShooterGame: React.FC<ShooterGameProps> = ({ isOpen, onClose, highScore, o
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            {!showLeaderboard && (
-              <>
-                {state.gameRunning && (<div className="absolute top-2 left-2 flex flex-col gap-1 z-10 text-white font-bold text-xs sm:text-sm"><div className="bg-black/70 px-2 py-1 rounded">Score: {uiState.score}</div><div className="bg-black/70 px-2 py-1 rounded text-cyan-400">Wave {uiState.wave}</div></div>)}
-                {state.gameRunning && (<div className="absolute top-2 right-2 flex items-center gap-1 z-10">{[...Array(Math.max(0, uiState.lives))].map((_, i) => (<img key={i} src={life} alt="Life" className="w-4 h-4 sm:w-6 sm:h-6" />))}</div>)}
-                <div className="absolute" style={{ left: state.player.x, top: state.player.y, width: imageSize, height: imageSize }}><img src={shooter} alt="Player" width={imageSize} height={imageSize} className="w-full h-full object-contain" /></div>
-                {state.bullets.map(b => (<div key={b.id} className="absolute w-1 h-3 bg-cyan-400 rounded-full shadow-lg" style={{ left: b.x, top: b.y, boxShadow: "0 0 6px #22d3ee" }} />))}
-                {state.bugs.map(b => (<div key={b.id} className="absolute select-none" style={{ left: b.x, top: b.y, width: imageSize, height: imageSize, transform: b.flipped ? "scaleX(-1)" : "scaleX(1)" }}><img src={bugImage} alt="Bug" width={imageSize} height={imageSize} className="w-full h-full object-contain" /></div>))}
-                {state.particles.map(p => (<div key={p.id} className="absolute rounded-full" style={{ left: p.x, top: p.y, width: p.size, height: p.size, backgroundColor: p.color, opacity: p.life / p.maxLife }} />))}
-              </>
-            )}
-            {!state.gameRunning && !showLeaderboard && (
-              <div className="absolute inset-0 bg-black/90 flex items-center justify-center rounded-xl">
-                <div className="text-center text-white max-w-xs sm:max-w-sm p-4 sm:p-6">
-                  {state.score > 0 ? (<>
-                    <h3 className="text-lg sm:text-2xl font-bold mb-2 text-red-500">Game Over!</h3>
-                    <p className="text-base sm:text-xl mb-2">Final Score: {state.score}</p>
-                    <p className="text-gray-400 mb-2 text-sm sm:text-base">Reached Wave {state.wave}</p>
-                    {state.score > highScore && <p className="text-yellow-400 font-bold mb-2">New High Score!</p>}
-                    <button onClick={initGame} className="bg-cyan-500 px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors w-full text-sm sm:text-base">Play Again</button>
-                  </>) : (
-                    <>
-                      <h3 className="text-lg sm:text-2xl font-bold mb-2 text-yellow-500">Time To Debug!!</h3>
-                      <p className="text-sm sm:text-base mb-4 text-gray-300">Arrow keys/AD or touch to move</p>
-                      <button onClick={initGame} className="bg-cyan-500 px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors w-full text-sm sm:text-base">Start Game</button>
-                    </>
-                  )}
+            <div className="absolute inset-0 z-0 opacity-5">
+              <LetterGlitch
+                glitchColors = {["#2b4539", "#61dca3", "#61b3dc"]}
+                glitchSpeed={50}
+                centerVignette={false}
+                outerVignette={false}
+                smooth={true}
+              />
+            </div>
+
+            <div className="absolute inset-0 z-10">
+              {!showLeaderboard && (
+                <>
+                  {state.gameRunning && (<div className="absolute top-2 left-2 flex flex-col gap-1 z-10 text-white font-bold text-xs sm:text-sm"><div className="bg-black/70 px-2 py-1 rounded">Score: {uiState.score}</div><div className="bg-black/70 px-2 py-1 rounded text-cyan-400">Wave {uiState.wave}</div></div>)}
+                  {state.gameRunning && (<div className="absolute top-2 right-2 flex items-center gap-1 z-10">{[...Array(Math.max(0, uiState.lives))].map((_, i) => (<img key={i} src={life} alt="Life" className="w-4 h-4 sm:w-6 sm:h-6" />))}</div>)}
+                  <div className="absolute" style={{ left: state.player.x, top: state.player.y, width: imageSize, height: imageSize }}><img src={shooter} alt="Player" width={imageSize} height={imageSize} className="w-full h-full object-contain" /></div>
+                  {state.bullets.map(b => (<div key={b.id} className="absolute w-1 h-3 bg-cyan-400 rounded-full shadow-lg" style={{ left: b.x, top: b.y, boxShadow: "0 0 6px #22d3ee" }} />))}
+                  {state.bugs.map(b => (<div key={b.id} className="absolute select-none" style={{ left: b.x, top: b.y, width: imageSize, height: imageSize, transform: b.flipped ? "scaleX(-1)" : "scaleX(1)" }}><img src={bugImage} alt="Bug" width={imageSize} height={imageSize} className="w-full h-full object-contain" /></div>))}
+                  {state.particles.map(p => (<div key={p.id} className="absolute rounded-full" style={{ left: p.x, top: p.y, width: p.size, height: p.size, backgroundColor: p.color, opacity: p.life / p.maxLife }} />))}
+                </>
+              )}
+              {!state.gameRunning && !showLeaderboard && (
+                <div className="absolute inset-0 bg-black/90 flex items-center justify-center rounded-xl">
+                  <div className="text-center text-white max-w-xs sm:max-w-sm p-4 sm:p-6">
+                    {state.score > 0 ? (<>
+                      <h3 className="text-lg sm:text-2xl font-bold mb-2 text-red-500">Game Over!</h3>
+                      <p className="text-base sm:text-xl mb-2">Final Score: {state.score}</p>
+                      <p className="text-gray-400 mb-2 text-sm sm:text-base">Reached Wave {state.wave}</p>
+                      {state.score > highScore && <p className="text-yellow-400 font-bold mb-2">New High Score!</p>}
+                      <button onClick={initGame} className="bg-cyan-500 px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors w-full text-sm sm:text-base">Play Again</button>
+                    </>) : (
+                      <>
+                        <h3 className="text-lg sm:text-2xl font-bold mb-2 text-yellow-500">Time To Debug!!</h3>
+                        <p className="text-sm sm:text-base mb-4 text-gray-300">Arrow keys/AD or touch to move</p>
+                        <button onClick={initGame} className="bg-cyan-500 px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors w-full text-sm sm:text-base">Start Game</button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
         {showLaggyText && state.gameRunning && !showLeaderboard && (
