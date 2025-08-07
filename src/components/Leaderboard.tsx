@@ -1,23 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { db, auth } from '../firebase';
 import {
   collection,
   getDocs,
-  setDoc,
-  doc,
   query,
   orderBy,
-  serverTimestamp,
+  addDoc,
+  where,
 } from 'firebase/firestore';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
 
 type Player = {
   name: string;
   score: number;
+  email: string;
 };
 
 const Leaderboard = () => {
@@ -27,54 +28,80 @@ const Leaderboard = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [userScore, setUserScore] = useState<number | null>(null);
+  const [userRank, setUserRank] = useState<number | null>(null);
 
-  // Fetch leaderboard
+  const fetchPlayers = useCallback(async () => {
+    const q = query(collection(db, 'leaderboard'), orderBy('score', 'desc'));
+    const snapshot = await getDocs(q);
+    const data = snapshot.docs.map(doc => doc.data() as Player);
+    setPlayers(data);
+
+    if (currentUser) {
+      const current = data.find(player => player.email === currentUser.email);
+      if (current) setUserScore(current.score);
+    }
+  }, [currentUser]);
+
   useEffect(() => {
-    const fetchPlayers = async () => {
-      const q = query(collection(db, 'leaderboard'), orderBy('score', 'desc'));
-      const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => doc.data() as Player);
-      setPlayers(data);
-    };
-
     fetchPlayers();
-  }, []);
+  }, [fetchPlayers]);
 
-  // Set default score if not set
   useEffect(() => {
-    const setDefaultScore = async () => {
-      if (!currentUser) return;
-      const userDoc = doc(db, 'leaderboard', currentUser.uid);
-      await setDoc(
-        userDoc,
-        {
-          name: currentUser.displayName || name,
-          score: 0,
-          createdAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
-    };
+    if (currentUser && currentUser.email) {
+      const index = players.findIndex((p) => p.email === currentUser.email);
+      if (index !== -1) {
+        setUserScore(players[index].score);
+        setUserRank(index + 1);
+      }
+    }
+  }, [players, currentUser]);
 
-    setDefaultScore();
-  }, [currentUser, name]);
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
+
+  const isNameTaken = async (username: string) => {
+    const snapshot = await getDocs(collection(db, 'leaderboard'));
+    return snapshot.docs.some(doc => doc.data().name === username);
+  };
+
+  const isEmailTaken = async (email: string) => {
+    const snapshot = await getDocs(
+      query(collection(db, 'leaderboard'), where('email', '==', email))
+    );
+    return !snapshot.empty;
+  };
 
   const handleSignup = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+      if (!name || !email || !password) {
+        setError('All fields are required');
+        return;
+      }
 
-      await setDoc(doc(db, 'leaderboard', user.uid), {
+      const usernameTaken = await isNameTaken(name);
+      if (usernameTaken) {
+        setError('Username already taken');
+        return;
+      }
+
+      const emailTaken = await isEmailTaken(email);
+      if (emailTaken) {
+        setError('An account with this email already exists');
+        return;
+      }
+
+      await createUserWithEmailAndPassword(auth, email, password);
+
+      await addDoc(collection(db, 'leaderboard'), {
         name,
         score: 0,
-        createdAt: serverTimestamp(),
+        email,
       });
 
       setError('');
+      await fetchPlayers();
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -84,8 +111,14 @@ const Leaderboard = () => {
 
   const handleSignin = async () => {
     try {
+      if (!email || !password) {
+        setError('Email and password are required');
+        return;
+      }
+
       await signInWithEmailAndPassword(auth, email, password);
       setError('');
+      await fetchPlayers();
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -94,12 +127,12 @@ const Leaderboard = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="w-screen h-screen overflow-hidden flex items-center justify-center bg-white p-4">
       {!currentUser ? (
-        <div className="space-y-4 max-w-md w-full bg-white p-6 rounded shadow">
+        <div className="space-y-4 max-w-md w-full bg-gray-100 p-6">
           <h2 className="text-xl font-semibold text-center">Login or Sign Up</h2>
           <input
-            placeholder="Name"
+            placeholder="Username"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full p-2 border rounded"
@@ -134,40 +167,51 @@ const Leaderboard = () => {
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
       ) : (
-        <div className="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg h-full flex flex-col">
-          <h2 className="text-3xl font-bold text-center mb-6">Leaderboard</h2>
-
-          <div className="grid grid-cols-3 font-semibold border-b pb-2 mb-2 text-gray-700">
-            <span>Rank</span>
-            <span>Name</span>
-            <span className="text-right">Score</span>
-          </div>
-
-          <div className="overflow-y-auto flex-grow space-y-2">
-            {players.slice(0, 50).map((player, idx) => {
-              let color = '';
-              if (idx === 0) color = 'text-yellow-500 font-bold';
-              else if (idx === 1) color = 'text-gray-500 font-bold';
-              else if (idx === 2) color = 'text-orange-400 font-bold';
-
-              return (
-                <div
-                  key={idx}
-                  className={`grid grid-cols-3 items-center p-2 rounded ${
-                    idx % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'
-                  } ${color}`}
-                >
-                  <span>#{idx + 1}</span>
-                  <span>{player.name}</span>
-                  <span className="text-right">{player.score}</span>
-                </div>
-              );
-            })}
+        <div className="w-full h-full flex items-center justify-center overflow-hidden">
+          <div className="w-full max-w-3xl h-full bg-gray-100 p-6 flex flex-col">
+            <div className="grid grid-cols-3 font-semibold border-b pb-2 mb-2 text-gray-700 sticky top-0 bg-gray-100 z-10 text-sm md:text-base">
+              <span>Rank</span>
+              <span>Name</span>
+              <span className="text-right">Score</span>
+            </div>
+  
+            {userScore !== null && (
+              <div className="text-center mb-2 text-blue-600 font-semibold sticky top-10 bg-gray-100 z-10 text-sm md:text-base">
+                Your Rank is #{userRank} with a score of {userScore}
+              </div>
+            )}
+  
+            <div className="overflow-y-scroll flex-grow space-y-2" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+              {players.slice(0, 50).map((player, idx) => {
+                let bg = '';
+                if (idx === 0) bg = 'bg-yellow-300 font-bold';
+                else if (idx === 1) bg = 'bg-gray-400 font-bold';
+                else if (idx === 2) bg = 'bg-orange-300 font-bold';
+                else bg = idx % 2 === 0 ? 'bg-gray-300' : 'bg-gray-200';
+  
+                return (
+                  <div
+                    key={idx}
+                    className={`grid grid-cols-3 items-center p-2 rounded ${bg} text-sm md:text-base`}
+                  >
+                    <span>#{idx + 1}</span>
+                    <span>{player.name}</span>
+                    <span className="text-right">{player.score}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <button
+              onClick={handleLogout}
+              className="absolute bottom-3 right-3 bg-red-600 text-white px-3 md:px-4 py-1 md:py-2 rounded text-sm md:text-base hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
           </div>
         </div>
       )}
     </div>
-  );
+  );  
 };
 
 export default Leaderboard;

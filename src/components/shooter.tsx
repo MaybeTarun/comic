@@ -8,6 +8,7 @@ import life from "../assets/heart.webp";
 import bugImage from "../assets/bug.webp";
 import LetterGlitch from '../components/Backgrounds/LetterGlitch/LetterGlitch';
 import Leaderboard from './Leaderboard';
+import HighScoreDisplay from './Highscore';
 
 interface Position { x: number; y: number }
 interface GameObject extends Position { id: number }
@@ -209,14 +210,14 @@ const ShooterGame: React.FC<ShooterGameProps> = ({ isOpen, onClose, highScore, o
               <FiX />
             </button>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
             <Leaderboard />
           </div>
         </div>
       )}
         <div className="flex justify-between items-center py-2 px-4 sm:px-6 bg-gray-100 border-b border-gray-200">
           <div className="text-yellow-500 font-semibold text-sm sm:text-lg truncate">
-            {!showLeaderboard && highScore > 0 && <>HighScore: {highScore}</>}
+            {!showLeaderboard && <>Your HighScore: <HighScoreDisplay /></>}
           </div>
           <div className="flex items-center gap-3">
             {!showLeaderboard && (
