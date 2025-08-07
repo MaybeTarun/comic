@@ -11,13 +11,13 @@ import finance from './assets/Finance.webp';
 import aaargh from './assets/Aaargh.webp';
 import mana from './assets/Mana.webp';
 import surgeon from './assets/surgeon.webp';
-import cognify from './assets/cognify.png';
-import holostry from './assets/Holostry.png';
-import Sentiment from './assets/Sentiment.png';
-import Colorizer from './assets/Colorizer.png';
+import cognify from './assets/Cognify.webp';
+import holostry from './assets/Holostry.webp';
+import Sentiment from './assets/Sentiment.webp';
+import Colorizer from './assets/Colorizer.webp';
 import Revo from './assets/Revo.webp';
-import knowabout from './assets/knowabout.png';
-import payback from './assets/payback.png';
+import knowabout from './assets/knowabout.webp';
+import payback from './assets/payback.webp';
 import soon from './assets/soon.png';
 
 const TABS = [
@@ -247,7 +247,7 @@ const AllProjects = () => {
                   <CachedImage
                     src={proj.image}
                     alt={proj.name}
-                    className="w-full h-auto object-contain bg-white cursor-pointer transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-auto object-contain bg-white transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 pointer-events-none bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10" />

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaLinkedin, FaXTwitter, FaGithub, FaEnvelope } from "react-icons/fa6";
 import skill from './assets/skill.webp';
 import DarkVeil from "./components/Backgrounds/DarkVeil/DarkVeil";
+import bug from './assets/bug.webp';
+import TextType from "./components/TextAnimations/TextType/TextType";
 
 const Tooltip = ({
   children,
@@ -36,7 +38,7 @@ const Tooltip = ({
 
       {show && (
         <div
-          className={`absolute ${boxPosition} bg-[#1e1e1e] text-white text-sm px-3 py-2 rounded-md z-[100] whitespace-nowrap`}
+          className={`absolute ${boxPosition} bg-[#1e1e1e] text-white text-sm px-3 py-2 rounded-md z-[100] whitespace-nowrap font-mono`}
         >
           <div className={trianglePosition} />
           {text}
@@ -46,20 +48,61 @@ const Tooltip = ({
   );
 };
 
+const LoadingAnimation = ({ onComplete }: { onComplete: () => void }) => {
+  const [animationStarted, setAnimationStarted] = useState(false);
+
+  useEffect(() => {
+    setAnimationStarted(true);
+    
+    const completeTimer = setTimeout(() => {
+      onComplete();
+    }, 1400);
+
+    return () => {
+      clearTimeout(completeTimer);
+    };
+  }, [onComplete]);
+
+  const rectangles = Array.from({ length: 4 }, (_, i) => (
+    <div
+      key={i}
+      className={`absolute top-0 bg-black transition-transform duration-[800ms] ease-out ${
+        animationStarted ? 'translate-y-0' : '-translate-y-full'
+      }`}
+      style={{
+        left: `${(i * 100) / 4}%`,       
+        width: `${100 / 4}%`,            
+        height: '100vh',                
+        transitionDelay: `${i * 300}ms`,
+      }}
+    />
+  ));
+
+  return (
+    <div className="fixed inset-0 z-[9999] bg-white">
+      {rectangles}
+    </div>
+  );
+};
+
 const Simple = () => (
-  <div className="h-screen w-screen overflow-hidden bg-black text-white font-mono select-text relative">
+  <div className="h-screen w-screen overflow-hidden text-white select-text relative alegreya-regular animate-fadeIn">
     <div className="absolute inset-0 z-0">
-      <DarkVeil />
+      <DarkVeil/>
     </div>
     
-    <div className="relative z-50 h-full w-full max-w-[700px] mx-auto flex flex-col p-2 sm:p-4 bg-black/85 backdrop-blur-lg">
+    <div className="relative z-50 h-full w-full max-w-[700px] mx-auto flex flex-col p-2 sm:p-4">
 
       <div className="flex justify-between items-center mb-8">
         <a 
           href="/" 
-          className="text-2xl font-bold cursor-pointer hover:scale-105 transition-all duration-100"
+          className="w-8 md:w-10 h-8 md:h-10 cursor-pointer hover:scale-105 transition-transform duration-100"
         >
-          TG
+          <img 
+            src={bug} 
+            alt="bug logo" 
+            className="w-full h-full object-contain" 
+          />
         </a>
         <a 
           href="https://drive.google.com/file/d/15owSoVRzK790PvYEza7jn6GHOUDquUAf/view" 
@@ -72,8 +115,8 @@ const Simple = () => (
       </div>
 
       <div className="mb-8 text-center">
-        <h2 className="text-3xl sm:text-4xl font-mono font-bold mb-1">Tarun Gupta</h2>
-        <p className="text-[#9f9f9f] text-sm sm:text-xl leading-relaxed">
+        <h2 className="text-4xl sm:text-5xl font-bold mb-1">Tarun Gupta</h2>
+        <p className="text-white/70 text-base sm:text-2xl leading-relaxed">
           <a href="/projects">
             <Tooltip text="certified by my projects" variant="left">
               Software Developer
@@ -90,15 +133,15 @@ const Simple = () => (
             </Tooltip>
           </a>
           <br />
-          <span className="text-xs sm:text-lg">&lt; Proficient in React.js and AWS &gt;</span>
+          <span className="text-sm sm:text-xl">&lt; proficient in <TextType text={["react.js", "typescript", "aws", "python", "everything tbh"]} cursorCharacter="_"/>&gt;</span>
         </p>
       </div>
 
       <div className="mb-6 text-center">
-        <p className="text-white text-sm sm:text-base mb-2">
-          Reach out to me on any of the following platforms
+        <p className="text-white text-sm sm:text-lg mb-2">
+          reach out to me on any of the following platforms
         </p>
-        <div className="flex flex-wrap justify-center gap-6 text-2xl text-[#9f9f9f]">
+        <div className="flex flex-wrap justify-center gap-6 text-xl sm:text-2xl text-white/70">
           <a 
             href="https://linkedin.com/in/maybetarun" 
             target="_blank" 
@@ -146,4 +189,20 @@ const Simple = () => (
   </div>
 );
 
-export default Simple;
+
+const Portfolio = () => {
+  const [loading, setLoading] = useState(true);
+
+  const handleAnimationComplete = () => {
+    setLoading(false);
+  };
+
+  return (
+    <>
+      {loading && <LoadingAnimation onComplete={handleAnimationComplete} />}
+      {!loading && <Simple />}
+    </>
+  );
+};
+
+export default Portfolio;

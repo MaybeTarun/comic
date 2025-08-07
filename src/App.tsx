@@ -3,7 +3,7 @@ import { SpeechBox, SpeechBoxR, SpeechBoxL, SpeechBoxLL, SpeechBoxSolid } from '
 import { AvatarCircles } from "./components/AvatarCircles";
 import skillbg from './assets/skillbg.webp';
 import concrete from './assets/concrete.webp';
-import cognify from './assets/cognify.png';
+import cognify from './assets/Cognify.webp';
 import bento from './assets/bento.webp';
 import aaargh from './assets/img4.mp4';
 import arrow from './assets/arrow.webp';
@@ -22,7 +22,6 @@ import sky from './assets/sky.webp';
 import looking from './assets/looking.webp';
 import boredme from './assets/boredme.webp';
 import bug from './assets/bug.webp';
-import ShooterGame from './components/shooter.tsx'
 import hand from './assets/hand.webp';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { getDatabase, ref, runTransaction, get } from 'firebase/database';
@@ -30,7 +29,7 @@ import app from './firebase';
 import LoadingScreen from './LoadingScreen';
 import { FiEye, FiHeart } from 'react-icons/fi';
 import CachedImage from './components/CachedImage';
-import bubble from './assets/bubble.webp';
+// import bubble from './assets/bubble.webp';
 import pow from './assets/pow.webp';
 
 const webDevAvatars = [
@@ -78,8 +77,6 @@ const uiuxAvatars = [
 function App() {
   const navigate = useNavigate();
   const [showSpeech, setShowSpeech] = useState(false);
-  const [isShooterOpen, setIsShooterOpen] = useState(false);
-
   const { scrollY } = useViewportScroll();
   const imgParallaxY = useTransform(scrollY, value => -value * 0.09);
 
@@ -96,15 +93,6 @@ function App() {
   const now = Date.now();
   const shouldShowLoading = !(lastLoaded && now - parseInt(lastLoaded, 10) < weekMs);
   const [loading, setLoading] = useState(shouldShowLoading);
-
-  const [shooterHighScore, setShooterHighScore] = useState(
-    Number.parseInt(localStorage.getItem("shooterHighScore") || "0")
-  );
-
-  const updateShooterHighScore = (newScore: number) => {
-    setShooterHighScore(newScore);
-    localStorage.setItem("shooterHighScore", newScore.toString());
-  };
 
   useEffect(() => {
     const lastLoaded = localStorage.getItem('comic-loading-last');
@@ -351,7 +339,7 @@ function App() {
             whileInView={{ x: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
             onClick={() => {
-              setIsShooterOpen(true);
+              navigate("/shooter");
             }}
           />
           <motion.img
@@ -363,7 +351,7 @@ function App() {
             whileInView={{ x: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
             onClick={() => {
-              setIsShooterOpen(true);
+              navigate("/shooter");
             }}
           />
           <motion.img
@@ -375,21 +363,15 @@ function App() {
             whileInView={{ x: 0 }}
             transition={{ type: 'spring', stiffness: 60, damping: 12, duration: 2 }}
             onClick={() => {
-              setIsShooterOpen(true);
+              navigate("/shooter");
             }}
-          />
-          <ShooterGame 
-            isOpen={isShooterOpen} 
-            onClose={() => setIsShooterOpen(false)}
-            highScore={shooterHighScore}
-            onHighScoreUpdate={updateShooterHighScore}
           />
           <div className='absolute bottom-4 left-8 gaegu-regular text-white text-base md:text-2xl'> &#91; Part time bug fixer &#93;	</div>
           {/* <div className='absolute top-4 right-8 gaegu-regular text-white text-base md:text-2xl'>Highscore: <span className='underline-offset-8 underline'>{shooterHighScore}</span></div> */}
           <div className="absolute top-4 right-8 gaegu-regular text-white text-base md:text-2xl group">
             <div className="relative inline-block">
-              Highscore: <span className="underline underline-offset-8">{shooterHighScore}</span>
-              <div className="absolute -left-2/3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+              {/* Highscore: <span className="underline underline-offset-8">{shooterHighScore}</span> */}
+              {/* <div className="absolute -left-2/3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
                 <div className="relative w-[10rem] sm:w-[12rem] rotate-3 md:-mt-2">
                   <img src={bubble} alt="tooltip bubble background" className="w-full h-auto" />
                   <span className="absolute inset-0 flex items-center justify-center text-center mt-3 text-black text-xs md:text-sm px-2 gaegu-bold whitespace-nowrap">
@@ -402,7 +384,7 @@ function App() {
                       : "Legendary Bug Slayer"}
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 

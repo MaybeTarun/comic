@@ -7,6 +7,7 @@ import shooter from "../assets/shooter.webp";
 import life from "../assets/heart.webp";
 import bugImage from "../assets/bug.webp";
 import LetterGlitch from '../components/Backgrounds/LetterGlitch/LetterGlitch';
+import Leaderboard from './Leaderboard';
 
 interface Position { x: number; y: number }
 interface GameObject extends Position { id: number }
@@ -200,7 +201,7 @@ const ShooterGame: React.FC<ShooterGameProps> = ({ isOpen, onClose, highScore, o
       {showLeaderboard && (
         <div className="absolute inset-0 bg-white z-50 flex flex-col text-black">
           <div className="flex justify-between items-center py-2 px-4 sm:px-6 bg-gray-100 border-b border-gray-200">
-            <div className="text-gray-800 font-semibold text-sm sm:text-lg">Welcome ...</div>
+            <div className="text-gray-800 font-semibold text-sm sm:text-lg">Leaderboards</div>
             <button
               onClick={() => setShowLeaderboard(false)}
               className="text-gray-600 hover:text-black text-xl sm:text-2xl"
@@ -208,8 +209,8 @@ const ShooterGame: React.FC<ShooterGameProps> = ({ isOpen, onClose, highScore, o
               <FiX />
             </button>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6">
-            <h2 className="text-2xl font-bold mb-4">Leaderboards Coming Soon</h2>
+          <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
+            <Leaderboard />
           </div>
         </div>
       )}
