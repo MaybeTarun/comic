@@ -7,19 +7,19 @@ import App from './App.tsx';
 import AllProjects from './allprojects';
 import Simple from './simple';
 import NotFound from './notfound.tsx';
-import ShooterRedirect from './components/ShooterRedirect.tsx';
+import Shooter from './components/shooter.tsx';
 import { AuthProvider } from './context/AuthContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
+        <Routes>  
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<App />} />
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/simple" element={<Simple />} />
-          <Route path="/shooter" element={<ShooterRedirect />} />
+          <Route path="/shooter" element={<Shooter isOpen={true} onClose={() => {}} highScore={0} onHighScoreUpdate={() => {}} />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
