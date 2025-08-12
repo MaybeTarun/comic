@@ -103,7 +103,7 @@ const Simple = ({ visible }: { visible: boolean }) => {
       <main className="relative z-10 flex flex-col sm:flex-row items-center justify-center sm:gap-8 px-4 sm:px-8 pt-[80px] min-h-dvh max-w-[1400px] mx-auto">
         
         <div className="flex flex-col items-center text-center w-full max-w-lg flex-shrink-0">
-          <div className="mb-6 sm:border-2 sm:border-white/50 sm:p-8 sm:rounded-3xl sm:bg-black/50 innerShadow sm:backdrop:blur-xl">
+          <div className="mb-6 sm:border-[1px] sm:border-white/50 sm:p-8 sm:rounded-3xl sm:bg-black/50 innerShadow sm:backdrop:blur-xl">
             <h2 className="text-4xl sm:text-5xl font-bold mb-1">Tarun Gupta</h2>
             <p className="text-white/90 text-base sm:text-xl leading-relaxed flex flex-wrap gap-2 justify-center">
               <a href="/projects">
