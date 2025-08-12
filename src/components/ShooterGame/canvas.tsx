@@ -3,6 +3,7 @@ import { FiVolume2, FiVolumeX, FiX } from "react-icons/fi";
 import Leaderboard from "./leaderboards.tsx";
 import GameArea from "./gamearea.tsx";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../../context/AuthContext.tsx";
 
 const Canvas: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
@@ -11,16 +12,25 @@ const Canvas: React.FC = () => {
   const [currentScore, setCurrentScore] = useState(0);
   const gameAreaRef = useRef<{ endGame: () => void }>(null);
   const navigate = useNavigate();
+  
+  const { currentUser, userHighScore, updateUserHighScore } = useAuth();
 
   useEffect(() => {
-    const storedHighScore = localStorage.getItem("shooterHighScore");
-    if (storedHighScore) {
-      setHighScore(Number(storedHighScore));
-    }
-  }, []);
+    setHighScore(userHighScore);
+  }, [userHighScore]);
 
-  const handleHighScoreUpdate = (newHighScore: number) => {
+  const handleHighScoreUpdate = async (newHighScore: number) => {
     setHighScore(newHighScore);
+    
+    localStorage.setItem("shooterHighScore", newHighScore.toString());
+    
+    if (currentUser) {
+      try {
+        await updateUserHighScore(newHighScore);
+      } catch (error) {
+        console.error('Error updating high score in Firestore:', error);
+      }
+    }
   };
 
   const handleScoreUpdate = (score: number) => {
@@ -43,14 +53,28 @@ const Canvas: React.FC = () => {
     navigate('/');
   };
 
+  const getScoreDisplayText = () => {
+    if (currentUser) {
+      return `Highscore: ${highScore} (Synced)`;
+    } else {
+      return `Highscore: ${highScore} (Local)`;
+    }
+  };
+
   return (
     <div className="w-screen h-screen bg-black flex flex-col overflow-hidden">
       <div className="flex justify-between items-center p-4 bg-gray-800 text-white z-30 relative">
         <div className="text-lg font-bold">
-          Highscore: {highScore} | Current: {currentScore}
+          {getScoreDisplayText()} | Current: {currentScore}
         </div>
 
         <div className="flex items-center gap-4">
+          {currentUser && (
+            <div className="text-sm text-gray-300 hidden sm:block">
+              Welcome, {currentUser.displayName || 'Player'}!
+            </div>
+          )}
+          
           <button
             onClick={handleLeaderboardOpen}
             className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
