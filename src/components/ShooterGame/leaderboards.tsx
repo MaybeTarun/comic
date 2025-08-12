@@ -32,7 +32,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white rounded-xl w-[500px] shadow-lg max-h-[85vh] flex flex-col">
-        {/* Header with title & close button */}
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-xl font-bold text-center flex-1">Leaderboards</h2>
           <button
@@ -43,9 +42,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
           </button>
         </div>
 
-        {/* Top 3 medals */}
         <div className="flex justify-center items-end gap-6 py-6 border-b">
-          {/* 2nd place - Silver */}
           <div className="flex flex-col items-center">
             <div
               className={`w-20 h-20 rounded-full flex justify-center items-center text-lg font-bold text-black ${medalColors[0]}`}
@@ -56,7 +53,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
             <span className="text-sm text-gray-500">{topThree[1].score}</span>
           </div>
 
-          {/* 1st place - Gold (bigger) */}
           <div className="flex flex-col items-center">
             <div
               className={`w-24 h-24 rounded-full flex justify-center items-center text-xl font-bold text-black ${medalColors[1]}`}
@@ -67,7 +63,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
             <span className="text-sm text-gray-500">{topThree[0].score}</span>
           </div>
 
-          {/* 3rd place - Bronze */}
           <div className="flex flex-col items-center">
             <div
               className={`w-20 h-20 rounded-full flex justify-center items-center text-lg font-bold text-white ${medalColors[2]}`}
@@ -79,14 +74,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Table Header */}
         <div className="grid grid-cols-3 font-bold border-b border-gray-400 bg-gray-200 sticky top-0 z-10">
             <div className="p-2 text-center">Rank</div>
             <div className="p-2 text-center">Username</div>
             <div className="p-2 text-center">Score</div>
         </div>
 
-        {/* Scrollable remaining players */}
         <div className="flex-1 overflow-y-auto">
         {others.map((player, index) => (
             <div

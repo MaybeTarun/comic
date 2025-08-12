@@ -8,7 +8,6 @@ import AllProjects from './allprojects';
 import Simple from './simple';
 import NotFound from './notfound.tsx';
 import Shooter from './components/ShooterGame/canvas.tsx';
-// import Shooter from './components/shooter.tsx';
 import { AuthProvider } from './context/AuthContext';
 
 createRoot(document.getElementById('root')!).render(
@@ -21,7 +20,6 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/simple" element={<Simple />} />
           <Route path="/shooter" element={<Shooter />} />
-          {/* <Route path="/shooter" element={<Shooter isOpen={true} onClose={() => {}} highScore={0} onHighScoreUpdate={() => {}} />} /> */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>
