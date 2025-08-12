@@ -27,9 +27,9 @@ const Tooltip = ({
 
       {show && (
         <div
-          className="absolute top-full mt-2 left-1/3 bg-[#1e1e1e] text-white text-sm px-3 py-2 rounded-md z-[100] whitespace-nowrap font-mono"
+          className="absolute top-full mt-2 left-1/3 bg-[#111111] text-white text-sm px-3 py-2 rounded-md z-[100] whitespace-nowrap font-mono"
         >
-          <div className="absolute -top-1 left-[10%] w-3 h-3 bg-[#1e1e1e] rotate-45" />
+          <div className="absolute -top-1 left-[10%] w-3 h-3 bg-[#111111] rotate-45" />
           {text}
         </div>
       )}
@@ -73,16 +73,16 @@ const LoadingAnimation = ({ visible }: { visible: boolean }) => {
 const Simple = ({ visible }: { visible: boolean }) => {
   return (
     <div
-      className={`min-h-dvh w-dvw text-white select-text relative alegreya-regular transition-opacity duration-1000 ${
+      className={`min-h-dvh w-dvw bg-black text-white select-text relative alegreya-regular transition-opacity duration-1000 ${
         visible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="fixed inset-0 z-0">
-        <DarkVeil />
+      <div className="fixed inset-0 z-0 opacity-70">
+        <DarkVeil speed={1} />
       </div>
 
       <nav className="fixed top-0 left-0 w-full z-50 bg-transparent px-4 py-3">
-        <div className="max-w-[1400px] mx-auto flex justify-between items-center">
+        <div className="max-w-[1200px] mx-auto flex justify-between items-center">
           <a
             href="/"
             className="w-8 md:w-10 h-8 md:h-10 cursor-pointer hover:scale-105 transition-transform"
@@ -103,9 +103,9 @@ const Simple = ({ visible }: { visible: boolean }) => {
       <main className="relative z-10 flex flex-col sm:flex-row items-center justify-center sm:gap-8 px-4 sm:px-8 pt-[80px] min-h-dvh max-w-[1400px] mx-auto">
         
         <div className="flex flex-col items-center text-center w-full max-w-lg flex-shrink-0">
-          <div className="mb-6">
+          <div className="mb-6 sm:border-2 sm:border-white/50 sm:p-8 sm:rounded-3xl sm:bg-black/50 innerShadow sm:backdrop:blur-xl">
             <h2 className="text-4xl sm:text-5xl font-bold mb-1">Tarun Gupta</h2>
-            <p className="text-white/70 text-base sm:text-xl leading-relaxed flex flex-wrap gap-2 justify-center">
+            <p className="text-white/90 text-base sm:text-xl leading-relaxed flex flex-wrap gap-2 justify-center">
               <a href="/projects">
                 <Tooltip text="certified by my projects">
                   Software Developer
@@ -122,7 +122,7 @@ const Simple = ({ visible }: { visible: boolean }) => {
                 </Tooltip>
               </a>
             </p>
-            <p className="text-sm sm:text-xl text-white/70">
+            <p className="text-sm sm:text-xl text-white/90">
               &lt; proficient in{" "}
               <TextType
                 text={["react.js", "typescript", "aws", "python", "everything tbh"]}
@@ -130,29 +130,29 @@ const Simple = ({ visible }: { visible: boolean }) => {
               />
               &gt;
             </p>
-          </div>
 
-          <div className="mb-6">
-            <p className="text-sm sm:text-lg mb-2">
-              reach out to me on any of the following platforms
-            </p>
-            <div className="flex gap-6 text-xl sm:text-2xl text-white/70 justify-center">
-              <a href="https://linkedin.com/in/maybetarun" target="_blank" className="hover:text-white">
-                <FaLinkedin />
-              </a>
-              <a href="https://twitter.com/maybetarun" target="_blank" className="hover:text-white">
-                <FaXTwitter />
-              </a>
-              <a href="https://github.com/maybetarun" target="_blank" className="hover:text-white">
-                <FaGithub />
-              </a>
-              <a href="mailto:tarun234.tg@gmail.com" className="hover:text-white">
-                <FaEnvelope />
-              </a>
+            <div className="mt-4 sm:mt-6">
+              <p className="text-sm sm:text-xl mb-2">
+                reach out to me on any of the following platforms
+              </p>
+              <div className="flex gap-6 text-xl sm:text-2xl text-white/70 justify-center">
+                <a href="https://linkedin.com/in/maybetarun" target="_blank" className="hover:text-white hover:-translate-y-1 transition-all duration-200">
+                  <FaLinkedin />
+                </a>
+                <a href="https://twitter.com/maybetarun" target="_blank" className="hover:text-white hover:-translate-y-1 transition-all duration-200">
+                  <FaXTwitter />
+                </a>
+                <a href="https://github.com/maybetarun" target="_blank" className="hover:text-white hover:-translate-y-1 transition-all duration-200">
+                  <FaGithub />
+                </a>
+                <a href="mailto:tarun234.tg@gmail.com" className="hover:text-white hover:-translate-y-1 transition-all duration-200">
+                  <FaEnvelope />
+                </a>
+              </div>
             </div>
           </div>
 
-          <div className="w-full max-w-xl mt-0 sm:mt-6">
+          <div className="w-full max-w-xl mt-0 sm:mt-12">
             <img
               src={experience}
               alt="Experience"
