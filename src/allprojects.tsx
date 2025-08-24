@@ -43,20 +43,6 @@ const PROJECTS: Project[] = [
     keywords: ['bento', 'grid', 'design', 'web', 'web development', 'react', 'typescript', 'tailwindcss', 'generator', 'responsive', 'frontend', 'component library', 'design system', 'css framework', 'modern web', 'developer tools', 'code generation', 'preview', 'templates', 'design inspiration']
   },
   {
-    image: foresty,
-    name: 'Foresty',
-    desc: 'Created a user-friendly platform that helps users easily discover vulnerabilities—such as open ports and other security risks—on their websites, empowering them to secure their online presence.',
-    link: 'https://github.com/MaybeTarun/Foresty',
-    keywords: ['security', 'vulnerability', 'web', 'web development', 'scanning', 'cybersecurity', 'pentesting', 'penetration testing', 'network security', 'port scanning', 'security audit', 'web security', 'ethical hacking', 'security tools', 'vulnerability assessment', 'threat detection', 'security scanner', 'network analysis', 'security testing', 'web application security', 'infrastructure security', 'security monitoring', 'html']
-  },
-  {
-    image: finance,
-    name: 'Finance Tracker',
-    desc: 'A full-featured MERN stack application for tracking personal finances. Includes intuitive dashboards, transaction management, and uses Clerk for secure user authentication and management.',
-    link: 'https://financetracker-neon.vercel.app/',
-    keywords: ['mern', 'finance', 'web', 'web development', 'react', 'node', 'mongodb', 'authentication', 'fullstack', 'javascript', 'express', 'financial management', 'dashboard', 'transaction tracking', 'budgeting', 'personal finance', 'clerk', 'user management', 'database', 'api', 'rest api', 'state management', 'responsive design', 'modern web app', 'financial dashboard']
-  },
-  {
     image: aaargh,
     name: 'Aaargh!!',
     desc: 'A voice-controlled game inspired by Flappy Bird, where you guide the player by making weird noises like "aaaah" or "aargh". Fun, chaotic, and a great way to test your vocal skills!',
@@ -71,18 +57,25 @@ const PROJECTS: Project[] = [
     keywords: ['3d', 'gaming', 'animation', 'branding', 'startup', 'business', 'immersive', '3d modeling', '3d animation', 'game development', 'brand identity', 'digital marketing', 'creative agency', '3d rendering', 'visual effects', 'digital art', 'brand development', '3d visualization', 'interactive 3d', '3d design', 'digital experiences', 'creative services', '3d graphics', 'brand strategy', 'immersive technology', 'web', 'web development', 'react', 'typescript']
   },
   {
-    image: surgeon,
-    name: 'Portfolio for a Surgeon',
-    desc: 'A modern, responsive portfolio website designed and developed for a doctor as part of my freelance work. Highlights expertise, services, and achievements in a clean, professional layout.',
-    link: 'https://www.surgeonrkl.com/',
-    keywords: ['portfolio', 'medical', 'freelance', 'responsive', 'professional', 'healthcare', 'web', 'web development', 'react', 'typescript', 'medical website', 'doctor portfolio', 'healthcare marketing', 'professional website', 'medical services', 'responsive design', 'modern design', 'clean layout', 'medical branding', 'healthcare design', 'professional portfolio', 'medical marketing', 'healthcare website', 'medical portfolio']
-  },
-  {
     image: cognify,
     name: 'Cognify',
     desc: 'A cloud-based learning platform built with Kotlin and XML that automates and personalizes learning. Integrates OpenAI to make understanding new topics easy and engaging for users.',
     link: 'https://github.com/MaybeTarun/Cognify',
     keywords: ['android', 'android development', 'kotlin', 'learning', 'ai', 'openai', 'education', 'personalization', 'mobile app', 'xml', 'android studio', 'machine learning', 'adaptive learning', 'educational technology', 'mobile development', 'xml', 'ai integration', 'learning platform', 'personalized education', 'android application', 'educational app', 'ai-powered learning', 'mobile learning', 'adaptive algorithms', 'educational software']
+  },
+  {
+    image: Revo,
+    name: 'Revo',
+    desc: 'A custom React project setup tool built on top of Vite. Streamlines your workflow with a clean project structure, pre-configured with Tailwind CSS and Framer Motion.',
+    link: 'https://www.npmjs.com/package/create-revo',
+    keywords: ['npm', 'npm package', 'package', 'react', 'vite', 'tailwind', 'framer motion', 'boilerplate', 'javascript', 'typescript', 'cli tool', 'project generator', 'react boilerplate', 'vite template', 'tailwind css', 'framer motion', 'project setup', 'developer tools', 'react template', 'modern react', 'react starter', 'project scaffolding', 'react cli', 'vite boilerplate', 'tailwind template', 'motion template']
+  },
+  {
+    image: surgeon,
+    name: 'Portfolio for a Surgeon',
+    desc: 'A modern, responsive portfolio website designed and developed for a doctor as part of my freelance work. Highlights expertise, services, and achievements in a clean, professional layout.',
+    link: 'https://www.surgeonrkl.com/',
+    keywords: ['portfolio', 'medical', 'freelance', 'responsive', 'professional', 'healthcare', 'web', 'web development', 'react', 'typescript', 'medical website', 'doctor portfolio', 'healthcare marketing', 'professional website', 'medical services', 'responsive design', 'modern design', 'clean layout', 'medical branding', 'healthcare design', 'professional portfolio', 'medical marketing', 'healthcare website', 'medical portfolio']
   },
   {
     image: holostry,
@@ -106,11 +99,18 @@ const PROJECTS: Project[] = [
     keywords: ['machine learning', 'image processing', 'colorization', 'ai', 'web', 'web development', 'ml model', 'python', 'flask', 'html', 'deep learning', 'computer vision', 'image restoration', 'neural networks', 'color restoration', 'black and white', 'photo enhancement', 'ai colorization', 'image ai', 'web application', 'image editing', 'color reconstruction', 'photo processing', 'ai tools', 'image enhancement', 'color restoration', 'photo colorization', 'ai image processing']
   },
   {
-    image: Revo,
-    name: 'Revo',
-    desc: 'A custom React project setup tool built on top of Vite. Streamlines your workflow with a clean project structure, pre-configured with Tailwind CSS and Framer Motion.',
-    link: 'https://www.npmjs.com/package/create-revo',
-    keywords: ['npm', 'npm package', 'package', 'react', 'vite', 'tailwind', 'framer motion', 'boilerplate', 'javascript', 'typescript', 'cli tool', 'project generator', 'react boilerplate', 'vite template', 'tailwind css', 'framer motion', 'project setup', 'developer tools', 'react template', 'modern react', 'react starter', 'project scaffolding', 'react cli', 'vite boilerplate', 'tailwind template', 'motion template']
+    image: foresty,
+    name: 'Foresty',
+    desc: 'Created a user-friendly platform that helps users easily discover vulnerabilities—such as open ports and other security risks—on their websites, empowering them to secure their online presence.',
+    link: 'https://github.com/MaybeTarun/Foresty',
+    keywords: ['security', 'vulnerability', 'web', 'web development', 'scanning', 'cybersecurity', 'pentesting', 'penetration testing', 'network security', 'port scanning', 'security audit', 'web security', 'ethical hacking', 'security tools', 'vulnerability assessment', 'threat detection', 'security scanner', 'network analysis', 'security testing', 'web application security', 'infrastructure security', 'security monitoring', 'html']
+  },
+  {
+    image: finance,
+    name: 'Finance Tracker',
+    desc: 'A full-featured MERN stack application for tracking personal finances. Includes intuitive dashboards, transaction management, and uses Clerk for secure user authentication and management.',
+    link: 'https://financetracker-neon.vercel.app/',
+    keywords: ['mern', 'finance', 'web', 'web development', 'react', 'node', 'mongodb', 'authentication', 'fullstack', 'javascript', 'express', 'financial management', 'dashboard', 'transaction tracking', 'budgeting', 'personal finance', 'clerk', 'user management', 'database', 'api', 'rest api', 'state management', 'responsive design', 'modern web app', 'financial dashboard']
   },
   {
     image: knowabout,
