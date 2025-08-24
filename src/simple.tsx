@@ -152,7 +152,7 @@ const Simple = ({ visible }: { visible: boolean }) => {
             </div>
           </div>
 
-          <div className="w-full max-w-xl mt-0 sm:mt-12">
+          <div className="w-full max-w-xl mt-0 sm:mt-12 sm:p-4">
             <img
               src={experience}
               alt="Experience"
@@ -161,7 +161,7 @@ const Simple = ({ visible }: { visible: boolean }) => {
           </div>
         </div>
 
-        <div className="flex-1 flex items-center justify-center w-full max-w-xl mb-6 sm:mb-0">
+        <div className="flex-1 flex items-center justify-center w-full max-w-xl mb-6 sm:mb-0 sm:p-8">
           <img
             src={skill}
             alt="skill diagram"

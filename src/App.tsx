@@ -31,6 +31,7 @@ import { FiEye, FiHeart } from 'react-icons/fi';
 import CachedImage from './components/CachedImage';
 // import bubble from './assets/bubble.webp';
 import pow from './assets/pow.webp';
+import plane from './assets/aargh.png';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -494,6 +495,7 @@ function App() {
             <SpeechBoxL className="absolute top-[24rem] -right-6 md:hidden block">
               With his powers now honed, Tarun<br/>sets off on <span className='gaegu-bold'>quests</span> that tests both<br/>his logic and caffeine limits.
             </SpeechBoxL>
+            <a href='https://aaargh.vercel.app/' target='_blank' rel='noopener noreferrer'><motion.img initial={{ x: '-100%' }} whileInView={{ x: 0 }} transition={{ duration: 1 }} src={plane} alt='Scream To Win' className='absolute w-20 md:w-28 -top-10 md:-top-12 left-12 md:left-1/3 cursor-pointer'></motion.img></a>
           </div>
           <motion.div className="w-1/2 relative" initial={{ x: '100%' }} whileInView={{ x: 0 }} transition={{ duration: 1, delay: 0.5 }} viewport={{ once: true }}>          
             <CachedImage className='translate-y-64 -translate-x-20 md:translate-x-0 right-0 w-auto md:scale-100 scale-[450%]' src={hand}></CachedImage>
@@ -995,7 +997,7 @@ function PageNumberControl() {
         <TiArrowSortedUp style={{ transform: 'rotate(-90deg)' }} />
       </button>
       <div className="px-6 py-2 border-2 border-black bg-white text-lg gaegu-bold">
-        Page {page} of 6
+        Page {page} of {totalPages}
       </div>
       <button
         onClick={handleNext}
