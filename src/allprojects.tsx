@@ -249,7 +249,7 @@ const AllProjects = () => {
                 />
                 <div className="absolute inset-0 pointer-events-none bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10" />
                 <div className="absolute top-10 md:top-16 left-2 md:left-4 flex flex-col items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 w-[80%]">
-                  <p className="text-base md:text-2xl text-white mb-2 w-full gaegu-regular">
+                  <p className="text-base md:text-2xl text-white mb-4 md:mb-8 w-full gaegu-regular">
                     {proj.desc}
                   </p>
                   {/* <div className="flex flex-wrap gap-2 mb-4 md:mb-8">
@@ -269,7 +269,7 @@ const AllProjects = () => {
                     href={proj.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block text-sm md:text-base px-2 py-1 md:px-4 md:py-2 bg-white text-black gaegu-regular border-2 border-black hover:bg-black hover:text-white transition-colors duration-200"
+                    className="inline-block text-sm md:text-base px-2 py-1 md:px-4 md:py-2 bg-white text-black font-mono border-2 border-black hover:bg-black hover:text-white transition-colors duration-200"
                   >
                     View Project
                   </a>
