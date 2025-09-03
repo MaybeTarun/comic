@@ -49,6 +49,7 @@ const webDevAvatars = [
 ];
 
 const androidDevAvatars = [
+  { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://reactnative.dev/" },
   { imageUrl: "https://skillicons.dev/icons?i=kotlin", profileUrl: "https://kotlinlang.org/" },
   { imageUrl: "https://skillicons.dev/icons?i=flutter", profileUrl: "https://flutter.dev/" },
   { imageUrl: "https://skillicons.dev/icons?i=mongodb", profileUrl: "https://www.mongodb.com/" },
