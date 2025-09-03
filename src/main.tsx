@@ -9,6 +9,7 @@ import Simple from './simple';
 import NotFound from './notfound.tsx';
 import Shooter from './components/ShooterGame/canvas.tsx';
 import { AuthProvider } from './context/AuthContext';
+import Resume from './resume';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/simple" element={<Simple />} />
           <Route path="/shooter" element={<Shooter />} />
+          <Route path="/resume" element={<Resume />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
