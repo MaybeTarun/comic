@@ -373,7 +373,6 @@ const Simple = ({ visible }: { visible: boolean }) => {
         </div>
       </div>
 
-      {/* Project Modal */}
       <ProjectModal 
         project={selectedProject}
         isOpen={isModalOpen}

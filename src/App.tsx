@@ -308,7 +308,7 @@ function App() {
           <SpeechBoxL className="absolute -bottom-28 right-4 md:right-16">
             He trained in the sacred arts of code,<br />logic, and late-night debugging.
           </SpeechBoxL>
-          <div className='absolute top-2 md:top-4 left-4 md:left-8 text-white text-sm md:text-lg bg-black/10 px-2 rounded-md'>Run &lt; npx know-about tarun &gt; in your terminal</div>
+          <div className='absolute top-2 md:top-4 left-4 md:left-8 text-white text-xs md:text-base bg-black/10 px-2 rounded-md'>Run &lt; npx know-about tarun &gt; in your terminal</div>
         </section>
 
 
