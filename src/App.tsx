@@ -522,7 +522,7 @@ function App() {
                 </h2>
               </div>
               <article>
-                <div className="relative group overflow-hidden">
+                <div className="relative group overflow-visible">
                   <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                     <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                     <div
@@ -545,12 +545,11 @@ function App() {
                     <CachedImage
                       src={link}
                       alt="Link to Concrete Damage Detector project"
-                      className="w-10 h-10"
-                      
+                      className="w-10 h-10 transition-all duration-300 transform group-hover:scale-125"
                       loading="lazy"
                     />
                   </a>
-                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-300 group-hover:opacity-0">
                     <h3 className="font-bold font-mono text-base capitalize text-center">Concrete Damage Detector</h3>
                     <p className="text-sm font-mono normal-case text-justify">Built a YOLO-powered damage detector to spot and segment cracks in concrete — keeping buildings strong, one frame at a time.</p>
                   </SpeechBoxSolid>
@@ -565,7 +564,7 @@ function App() {
                 </div>
               </article>
                           <article>
-                <div className="relative group overflow-hidden">
+                <div className="relative group overflow-visible">
                   <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                     <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                     <div
@@ -588,12 +587,11 @@ function App() {
                     <CachedImage
                       src={link}
                       alt="Link to Bento Grid Generator project"
-                      className="w-10 h-10"
-                      
+                      className="w-10 h-10 transition-all duration-300 transform group-hover:scale-125"
                       loading="lazy"
                     />
                   </a>
-                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-300 group-hover:opacity-0">
                     <h3 className="font-bold font-mono text-base capitalize text-center">Bento Grid Generator</h3>
                     <p className="text-sm font-mono normal-case text-justify">Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.</p>
                   </SpeechBoxSolid>
@@ -623,7 +621,7 @@ function App() {
                 </Link>
               </div>
               <article>
-                <div className="relative group overflow-hidden">
+                <div className="relative group overflow-visible">
                   <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                     <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                     <div
@@ -646,12 +644,11 @@ function App() {
                     <CachedImage
                       src={link}
                       alt="Link to Cognify project"
-                      className="w-10 h-10"
-                      
+                      className="w-10 h-10 transition-all duration-300 transform group-hover:scale-125"
                       loading="lazy"
                     />
                   </a>
-                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-300 group-hover:opacity-0">
                     <h3 className="font-bold font-mono text-base capitalize text-center">Cognify</h3>
                     <p className="text-sm font-mono normal-case text-justify">Developed an Android learning platform with Kotlin and OpenAI to simplify how users learn and understand new concepts.</p>
                   </SpeechBoxSolid>
@@ -666,7 +663,7 @@ function App() {
                 </div>
               </article>
               <article>
-                <div className="relative group overflow-hidden">
+                <div className="relative group overflow-visible">
                   <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                     <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                     <div
@@ -689,12 +686,11 @@ function App() {
                     <CachedImage
                       src={link}
                       alt="Link to AAARGH!!"
-                      className="w-10 h-10"
-                      
+                      className="w-10 h-10 transition-all duration-300 transform group-hover:scale-125"
                       loading="lazy"
                     />
                   </a>
-                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-500 group-hover:translate-y-[150%]">
+                  <SpeechBoxSolid className="absolute left-1/2 bottom-4 -translate-x-1/2 w-2/3 px-4 py-2 z-10 m-0 text-xs font-mono text-center transition duration-300 group-hover:opacity-0">
                     <h3 className="font-bold font-mono text-base capitalize text-center">AAARGH!!</h3>
                     <p className="text-sm font-mono normal-case text-justify">Built a game where screaming 'aaaargh' actually makes you fly — no tapping, just weird noises.</p>
                   </SpeechBoxSolid>
@@ -720,7 +716,7 @@ function App() {
               </h2>
             </div>
             <article className="w-[90vw] h-full">
-              <div className="relative group overflow-hidden w-full h-full">
+              <div className="relative group overflow-visible w-full h-full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -743,8 +739,7 @@ function App() {
                   <CachedImage
                     src={link}
                     alt="Link to Concrete Damage Detector project"
-                    className="w-10 h-10"
-                    
+                    className="w-10 h-10 opacity-70 transition-all duration-300 transform group-hover:opacity-100 group-hover:scale-125"
                     loading="lazy"
                   />
                 </a>
@@ -763,7 +758,7 @@ function App() {
               </SpeechBoxSolid>
             </article>
             <article className="w-[90vw] h-full">
-              <div className="relative group overflow-hidden w-full h-full">
+              <div className="relative group overflow-visible w-full h-full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -786,8 +781,7 @@ function App() {
                   <CachedImage
                     src={link}
                     alt="Link to Bento Grid Generator project"
-                    className="w-10 h-10"
-                    
+                    className="w-10 h-10 opacity-70 transition-all duration-300 transform group-hover:opacity-100 group-hover:scale-125"
                     loading="lazy"
                   />
                 </a>
@@ -806,7 +800,7 @@ function App() {
               </SpeechBoxSolid>
             </article>
             <article className="w-[90vw] h-full">
-              <div className="relative group overflow-hidden w-full h-full">
+              <div className="relative group overflow-visible w-full h-full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -829,8 +823,7 @@ function App() {
                   <CachedImage
                     src={link}
                     alt="Link to Cognify project"
-                    className="w-10 h-10"
-                    
+                    className="w-10 h-10 opacity-70 transition-all duration-300 transform group-hover:opacity-100 group-hover:scale-125"
                     loading="lazy"
                   />
                 </a>
@@ -849,7 +842,7 @@ function App() {
               </SpeechBoxSolid>
             </article>
             <article className="w-[90vw] h-full">
-              <div className="relative group overflow-hidden w-full h-full">
+              <div className="relative group overflow-visible w/full h/full">
                 <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none">
                   <div className="absolute top-0 right-0 w-10 h-10 bg-black pointer-events-none" />
                   <div
@@ -872,8 +865,7 @@ function App() {
                   <CachedImage
                     src={link}
                     alt="Link to AAARGH!!"
-                    className="w-10 h-10"
-                    
+                    className="w-10 h-10 opacity-70 transition-all duration-300 transform group-hover:opacity-100 group-hover:scale-125"
                     loading="lazy"
                   />
                 </a>

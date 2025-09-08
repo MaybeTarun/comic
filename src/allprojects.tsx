@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import type React from 'react';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -143,6 +144,22 @@ const AllProjects = () => {
     return 2;
   };
   const [page, setPage] = useState(getInitialPage);
+  
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  // Helper to handle touch for card expansion/collapse
+  function handleCardTouch(idx: number) {
+    // If already expanded, collapse; otherwise, expand this card
+    setHoveredIdx((prev) => (prev === idx ? null : idx));
+  }
+
+  // Also allow keyboard accessibility (optional best practice)
+  function handleCardKeyDown(e: React.KeyboardEvent<HTMLDivElement>, idx: number) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleCardTouch(idx);
+    }
+  }
 
   const filteredProjects = useMemo(() => {
     return PROJECTS.filter(project => {
@@ -233,48 +250,53 @@ const AllProjects = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center md:p-2 mb-8 md:mb-16">
-            {filteredProjects.map((proj, idx) => (
-              <div
+            {filteredProjects.map((proj, idx: number) => (
+              <motion.div
                 key={idx}
-                className="w-full relative flex items-center justify-center group overflow-hidden border-4 border-black"
+                className="h-[30rem] w-full flex flex-col gap-4 cursor-default"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                onMouseEnter={() => setHoveredIdx(idx)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                onTouchStart={() => handleCardTouch(idx)}
+                tabIndex={0}
+                onKeyDown={(e) => handleCardKeyDown(e, idx)}
+                role="button"
+                aria-expanded={hoveredIdx === idx}
               >
-                <div className="absolute top-2 left-2 md:left-4 z-20 gaegu-bold uppercase text-base md:text-2xl font-bold text-white">
-                  {proj.name}
-                </div>
-                <CachedImage
-                  src={proj.image}
-                  alt={proj.name}
-                  className="w-full h-auto object-contain bg-white transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 pointer-events-none bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10" />
-                <div className="absolute top-10 md:top-16 left-2 md:left-4 flex flex-col items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 w-[80%]">
-                  <p className="text-base md:text-2xl text-white mb-4 md:mb-8 w-full gaegu-regular">
-                    {proj.desc}
-                  </p>
-                  {/* <div className="flex flex-wrap gap-2 mb-4 md:mb-8">
-                    <span className="text-sm md:text-lg text-white gaegu-bold">
-                      Tech used:
-                    </span>
-                    {proj.keywords.slice(0, 4).map((keyword, keywordIdx) => (
-                      <span
-                        key={keywordIdx}
-                        className="inline-block text-base md:text-xl text-white gaegu-regular capitalize"
-                      >
-                        {keyword}{keywordIdx < Math.min(proj.keywords.length, 4) - 1 ? ',' : ''}
-                      </span>
-                    ))}
-                  </div> */}
-                  <a
-                    href={proj.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block text-sm md:text-base px-2 py-1 md:px-4 md:py-2 bg-white text-black font-mono border-2 border-black hover:bg-black hover:text-white transition-colors duration-200"
-                  >
-                    View Project
-                  </a>
-                </div>
-              </div>
+                <motion.div
+                  className="relative overflow-hidden flex-1 w-full"
+                  animate={{ height: hoveredIdx === idx ? '18rem' : '24rem' }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <CachedImage
+                    src={proj.image}
+                    alt={proj.name}
+                    className="h-full w-full object-cover border-4 border-black"
+                    loading="lazy"
+                  />
+                </motion.div>
+                <motion.div
+                  className="flex flex-col gap-2 text-black overflow-hidden"
+                  animate={{ height: hoveredIdx === idx ? 'auto' : '2rem' }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="gaegu-bold text-xl uppercase">{proj.name}</div>
+                  <div className="gaegu-regular text-base md:text-lg mb-1">{proj.desc}</div>
+                  <div>
+                    <a
+                      href={proj.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block text-base px-3 py-1 md:px-4 md:py-2 bg-white text-black font-mono border-2 border-black hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      View Project
+                    </a>
+                  </div>
+                </motion.div>
+              </motion.div>
             ))}
           </div>
         )}

@@ -297,7 +297,7 @@ const Simple = ({ visible }: { visible: boolean }) => {
             <h2 className={`text-lg font-mono transition-colors duration-300 mt-2 ${
               isDarkTheme ? "text-white/90" : "text-black/90"
             }`}>
-              where i have worked so far -
+              work experience -
             </h2>
             <div className={`text-sm font-mono transition-colors duration-300 flex items-center flex-wrap ${
               isDarkTheme ? "text-white/70" : "text-black/70"
