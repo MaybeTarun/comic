@@ -21,11 +21,14 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/simple" element={<Simple />} />
           <Route path="/shooter" element={<Shooter />} />
-          <Route path="/resume" element={<Redirect href="https://drive.google.com/file/d/15owSoVRzK790PvYEza7jn6GHOUDquUAf/view?usp=sharing" />} />
+          <Route path="/resume" element={<Redirect href="https://drive.google.com/file/d/19hLkURpDIViuhCE0YQf5_Vm9PrkAf6Ns/view?usp=sharing" />} />
           <Route path="/freelance" element={<Redirect href="https://freelance.maybetarun.in" />} />
           <Route path="/github" element={<Redirect href="https://github.com/maybetarun" />} />
+          <Route path="/guthub" element={<Redirect href="https://github.com/maybetarun" />} />
           <Route path="/twitter" element={<Redirect href="https://twitter.com/maybetarun" />} />
           <Route path="/linkedin" element={<Redirect href="https://linkedin.com/in/maybetarun" />} />
+          <Route path="/instagram" element={<Redirect href="https://instagram.com/maybe._.tarun" />} />
+          <Route path="/medium" element={<Redirect href="https://medium.com/@maybetarun" />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
