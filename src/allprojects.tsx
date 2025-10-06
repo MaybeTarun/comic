@@ -7,6 +7,7 @@ import CachedImage from './components/CachedImage';
 
 import concrete from './assets/concrete.webp';
 import bento from './assets/bento.webp';
+import freelance from './assets/Freelance.webp';
 import foresty from './assets/Foresty.webp';
 import finance from './assets/Finance.webp';
 import aaargh from './assets/Aaargh.webp';
@@ -37,6 +38,13 @@ const PROJECTS: Project[] = [
     keywords: ['machine learning', 'computer vision', 'yolo', 'yolov8', 'python', 'ai', 'detection', 'roboflow', 'cv2', 'ultralytics', 'supervision', 'object detection', 'image processing', 'deep learning', 'neural networks', 'opencv', 'computer vision', 'construction', 'damage assessment', 'segmentation', 'real-time', 'inference']
   },
   {
+    image: freelance,
+    name: 'Freelancer Me',
+    desc: 'A freelance website built with React.js and Tailwind CSS. It is a platform where i showcase all my freelance work and you can hire me for your projects.',
+    link: 'https://freelance.maybetarun.in/',
+    keywords: ['freelance', 'react', 'tailwind', 'web', 'web development', 'react.js', 'tailwind css', 'frontend', 'developer', 'portfolio', 'showcase', 'client', 'project', 'work', 'portfolio website', 'freelance website', 'react developer', 'tailwind developer', 'web developer', 'portfolio website', 'freelance website', 'react developer', 'tailwind developer', 'web developer']
+  },
+  {
     image: bento,
     name: 'BentoGen',
     desc: 'Designed a tool that generates bento-style UI layouts with live previews and exportable code templates.',
@@ -51,6 +59,13 @@ const PROJECTS: Project[] = [
     keywords: ['game', 'voice control', 'web', 'web development', 'react', 'audio', 'interactive', 'fun', 'gaming', 'voice recognition', 'speech processing', 'audio processing', 'web audio api', 'game development', 'browser game', 'voice commands', 'audio visualization', 'sound detection', 'real-time audio', 'web game', 'interactive entertainment', 'voice interface', 'audio games', 'speech detection']
   },
   {
+    image: Revo,
+    name: 'Revo',
+    desc: 'A custom React project setup tool built on top of Vite. Streamlines your workflow with a clean project structure, pre-configured with Tailwind CSS and Framer Motion.',
+    link: 'https://www.npmjs.com/package/create-revo',
+    keywords: ['npm', 'npm package', 'package', 'react', 'vite', 'tailwind', 'framer motion', 'boilerplate', 'javascript', 'typescript', 'cli tool', 'project generator', 'react boilerplate', 'vite template', 'tailwind css', 'framer motion', 'project setup', 'developer tools', 'react template', 'modern react', 'react starter', 'project scaffolding', 'react cli', 'vite boilerplate', 'tailwind template', 'motion template']
+  },
+  {
     image: mana,
     name: 'Mana House',
     desc: 'A service-based startup that creates 3D projects for brands and agencies. We build games, 3D models, animations, and more to help businesses stand out with immersive digital experiences.',
@@ -63,13 +78,6 @@ const PROJECTS: Project[] = [
     desc: 'A cloud-based learning platform built with Kotlin and XML that automates and personalizes learning. Integrates OpenAI to make understanding new topics easy and engaging for users.',
     link: 'https://github.com/MaybeTarun/Cognify',
     keywords: ['android', 'android development', 'kotlin', 'learning', 'ai', 'openai', 'education', 'personalization', 'mobile app', 'xml', 'android studio', 'machine learning', 'adaptive learning', 'educational technology', 'mobile development', 'xml', 'ai integration', 'learning platform', 'personalized education', 'android application', 'educational app', 'ai-powered learning', 'mobile learning', 'adaptive algorithms', 'educational software']
-  },
-  {
-    image: Revo,
-    name: 'Revo',
-    desc: 'A custom React project setup tool built on top of Vite. Streamlines your workflow with a clean project structure, pre-configured with Tailwind CSS and Framer Motion.',
-    link: 'https://www.npmjs.com/package/create-revo',
-    keywords: ['npm', 'npm package', 'package', 'react', 'vite', 'tailwind', 'framer motion', 'boilerplate', 'javascript', 'typescript', 'cli tool', 'project generator', 'react boilerplate', 'vite template', 'tailwind css', 'framer motion', 'project setup', 'developer tools', 'react template', 'modern react', 'react starter', 'project scaffolding', 'react cli', 'vite boilerplate', 'tailwind template', 'motion template']
   },
   {
     image: surgeon,

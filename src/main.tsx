@@ -29,6 +29,10 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/linkedin" element={<Redirect href="https://linkedin.com/in/maybetarun" />} />
           <Route path="/instagram" element={<Redirect href="https://instagram.com/maybe._.tarun" />} />
           <Route path="/medium" element={<Redirect href="https://medium.com/@maybetarun" />} />
+          <Route path="/message" element={<Redirect href="https://x.com/messages/compose?recipient_id=MaybeTarun" />} />
+          <Route path="/talk" element={<Redirect href="https://x.com/messages/compose?recipient_id=MaybeTarun" />} />
+          <Route path="/dm" element={<Redirect href="https://x.com/messages/compose?recipient_id=MaybeTarun" />} />
+          <Route path="/contact" element={<Redirect href="https://x.com/messages/compose?recipient_id=MaybeTarun" />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
