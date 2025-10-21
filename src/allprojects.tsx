@@ -154,6 +154,18 @@ const AllProjects = () => {
   const [page, setPage] = useState(getInitialPage);
   
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+useEffect(() => {
+  const checkMobile = () => {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsMobile(window.innerWidth < 768 || isTouchDevice);
+  };
+
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  return () => window.removeEventListener('resize', checkMobile);
+}, []);
 
   // Helper to handle touch for card expansion/collapse
   function handleCardTouch(idx: number) {
@@ -265,17 +277,17 @@ const AllProjects = () => {
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                onMouseEnter={() => setHoveredIdx(idx)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                onTouchStart={() => handleCardTouch(idx)}
+                onMouseEnter={() => !isMobile && setHoveredIdx(idx)}
+                onMouseLeave={() => !isMobile && setHoveredIdx(null)}
+                onTouchStart={() => !isMobile && handleCardTouch(idx)}
                 tabIndex={0}
                 onKeyDown={(e) => handleCardKeyDown(e, idx)}
                 role="button"
                 aria-expanded={hoveredIdx === idx}
-              >
+              >            
                 <motion.div
                   className="relative overflow-hidden flex-1 w-full"
-                  animate={{ height: hoveredIdx === idx ? '18rem' : '24rem' }}
+                  animate={{ height: isMobile ? '18rem' : hoveredIdx === idx ? '18rem' : '24rem' }}
                   transition={{ duration: 0.25 }}
                 >
                   <CachedImage
@@ -287,7 +299,7 @@ const AllProjects = () => {
                 </motion.div>
                 <motion.div
                   className="flex flex-col gap-2 text-black overflow-hidden"
-                  animate={{ height: hoveredIdx === idx ? 'auto' : '2rem' }}
+                  animate={{ height: isMobile ? 'auto' : hoveredIdx === idx ? 'auto' : '2rem' }}
                   transition={{ duration: 0.2 }}
                 >
                   <div className="gaegu-bold text-xl uppercase">{proj.name}</div>
