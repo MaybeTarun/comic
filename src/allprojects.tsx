@@ -61,8 +61,8 @@ const PROJECTS: Project[] = [
   {
     image: Revo,
     name: 'Revo',
-    desc: 'A custom React project setup tool built on top of Vite. Streamlines your workflow with a clean project structure, pre-configured with Tailwind CSS and Framer Motion.',
-    link: 'https://www.npmjs.com/package/create-revo',
+    desc: 'Revo is a project setup tool that helps you quickly build modern Next.js apps with React, Tailwind CSS, Framer Motion, and more — all preconfigured and ready to go.',
+    link: 'https://revo-murex.vercel.app/',
     keywords: ['npm', 'npm package', 'package', 'react', 'vite', 'tailwind', 'framer motion', 'boilerplate', 'javascript', 'typescript', 'cli tool', 'project generator', 'react boilerplate', 'vite template', 'tailwind css', 'framer motion', 'project setup', 'developer tools', 'react template', 'modern react', 'react starter', 'project scaffolding', 'react cli', 'vite boilerplate', 'tailwind template', 'motion template']
   },
   {
