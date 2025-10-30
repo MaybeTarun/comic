@@ -32,6 +32,7 @@ import CachedImage from './components/CachedImage';
 // import bubble from './assets/bubble.webp';
 import pow from './assets/pow.webp';
 import plane from './assets/aargh.png';
+import { HiTrophy } from 'react-icons/hi2';
 
 const webDevAvatars = [
   { imageUrl: "https://skillicons.dev/icons?i=react", profileUrl: "https://react.dev/" },
@@ -257,6 +258,15 @@ function App() {
           transition={{ delay: 2 }}
         >
           <span className="flex items-center gap-2">
+            {/* Achievements */}
+            <button
+              className="focus:outline-none flex items-center cursor-pointer hover:text-yellow-400 transition-colors"
+              onClick={() => navigate('/achievements')}
+              aria-label="View Achievements"
+            >
+              <HiTrophy className="text-[22px] mr-1" />
+            </button>
+            {/* Likes */}
             <button
               className="focus:outline-none flex items-center cursor-pointer"
               onClick={handleLike}
@@ -269,6 +279,7 @@ function App() {
               />
               <span className="ml-1 select-none">{likes === null ? '.' : likes}</span>
             </button>
+            {/* Views */}
             <FiEye className="inline-block text-2xl" aria-label="Total Reads" />
             <span className=''>{views === null ? '.' : views}</span>
           </span>

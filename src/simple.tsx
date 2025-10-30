@@ -18,6 +18,8 @@ import cogIcon from "./assets/cogIcon.png";
 import bentoIcon from "./assets/bentoIcon.png";
 import crackIcon from "./assets/crackIcon.png";
 import knowIcon from "./assets/knowIcon.png";
+import revoIcon from "./assets/revoIcon.png";
+import revoImg from "./assets/Revo.webp";
 
 const LoadingAnimation = ({ visible }: { visible: boolean }) => {
   const [animationStarted, setAnimationStarted] = useState(false);
@@ -89,6 +91,15 @@ const Simple = ({ visible }: { visible: boolean }) => {
   ];
 
   const projects = [
+    {
+      slug: "revo",
+      name: "Revo",
+      icon: revoIcon,
+      description: "Revo is a project setup tool that helps you quickly build modern Next.js apps with React, Tailwind CSS, Framer Motion, and more — all preconfigured and ready to go.",
+      link: "https://revo-murex.vercel.app/",
+      image: revoImg,
+      tools: ["Node.js", "Javacript"]
+    },
     {
       slug: "cracks",
       name: "concrete crack detection",
@@ -193,15 +204,6 @@ const Simple = ({ visible }: { visible: boolean }) => {
       <div className="w-full md:w-[650px] h-full flex flex-col bg-transparent">
 
         <div className="flex justify-between items-center px-0 md:px-6 py-4 transition-colors duration-300">
-          <button 
-            onClick={() => window.location.href = '/'}
-            className={`flex justify-center items-center gap-1 hover:opacity-70 transition-opacity duration-300 font-mono ${
-              isDarkTheme ? "text-white" : "text-black"
-            }`}
-          >
-            <FaArrowRightToBracket className="text-base scale-x-[-1] -mt-[2px]" />
-            <span>back</span>
-          </button>
           
           <div className="flex gap-2">
             <button 
@@ -222,6 +224,17 @@ const Simple = ({ visible }: { visible: boolean }) => {
               {isDarkTheme ? <LuSun className="text-sm border-gray-600" /> : <LuMoon className="text-sm border-gray-300" />}
             </button>
           </div>
+
+          <button 
+            onClick={() => window.location.href = '/'}
+            className={`flex justify-center items-center gap-1 hover:opacity-70 transition-opacity duration-300 font-mono ${
+              isDarkTheme ? "text-white" : "text-black"
+            }`}
+          >
+            <FaArrowRightToBracket className="text-base scale-x-[-1] -mt-[2px]" />
+            <span>back</span>
+          </button>
+          
         </div>
 
         <div className="flex-1 md:px-6">
